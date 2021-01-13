@@ -1,12 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { IconButton, Colors } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AppList() {
   return (
     <View style={styles.container}>
       <Text>List!</Text>
       <StatusBar style="light" />
+
+      <LinearGradient
+        // Button Linear Gradient
+        colors={['#4c669f', '#3b5998', '#192f6a']}
+        style={styles.button}>
+        <Text style={styles.text}>Sign in with Facebook</Text>
+      </LinearGradient>
+      
+      <IconButton
+        icon="plus"
+        color="#E9EAFA"
+        size={50}
+        onPress={() => console.log('Pressed')}
+        style={{ backgroundColor: "#1F8DFC" }}
+      />
+
     </View>
   );
 }
