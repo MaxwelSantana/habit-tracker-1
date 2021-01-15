@@ -3,10 +3,14 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import CircularProgress from './CircularProgress';
 
 export default function AppList() {
 	return (
 		<View style={styles.container}>
+
+			<CircularProgress />
+
 			<Text>List!</Text>
 			<StatusBar style="light" />
 
@@ -24,6 +28,7 @@ export default function AppList() {
 				onPress={() => console.log('Pressed')}
 				style={{ backgroundColor: "#1F8DFC" }}
 			/>
+
 
 		</View>
 	);
