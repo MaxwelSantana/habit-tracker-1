@@ -17,68 +17,66 @@ const cx = "50%";
 const cy = "50%";
 
 export default function CircularProgress({
-    percentage = 85,
+    percentage = 90,
+    max = 100,
     radius = 40,
-    duration = 500,
+    duration = percentage * 10,
     color = "#1F8DFC",
-    max = 100
 }) {
-    const animated = React.useRef(new Animated.Value(0)).current;
-    const circleRef = React.useRef();
     const circumference = 2 * Math.PI * radius;
     const halfCircle = radius + strokeWidth;
+    const animated = new Animated.Value(0);
+    
+    percentage = percentage > max ? max : percentage < 0 ? 0 : percentage;
+    const maxPerc = 100 * percentage / max;
+    const circumferenceProgress = (circumference * maxPerc) / 100;
 
-    const animation = (toValue) => {
-        return Animated.timing(animated, {
-            delay: 100,
-            toValue,
-            duration,
-            useNativeDriver: true,
-            easing: Easing.out(Easing.ease),
-        }).start();
-    };
+    const strokeDashoffset = animated.interpolate({
+        inputRange: [0, circumference],
+        outputRange: [circumference, 0],
+        extrapolate: 'clamp'
+    });
 
     React.useEffect(() => {
-        animation(percentage);
-        animated.addListener((v) => {
-            const maxPerc = 100 * v.value / max;
-            const strokeDashoffset = circumference - (circumference * maxPerc) / 100;
-
-            if (circleRef?.current) {
-                circleRef.current.setNativeProps({
-                    strokeDashoffset,
-                });
+        Animated.timing(
+            animated,
+            {
+                delay: 0,
+                toValue: circumferenceProgress,
+                duration,
+                useNativeDriver: true,
+                easing: Easing.linear
             }
-        }, [max, percentage]);
+        ).start();
+        console.log('##############################################');
+        animated.addListener((v) => {
+            console.log(v.value, strokeDashoffset);
+        });
 
         return () => {
             animated.removeAllListeners();
         };
-    });
-
+    }, [animated]);
 
     return (
         <View style={{ width: radius * 2, height: radius * 2 }}>
 
-            <Svg 
-                width={radius * 2} 
-                height={radius * 2} 
+            <Svg
+                width={radius * 2}
+                height={radius * 2}
                 viewBox={`0 0 ${halfCircle * 2} ${halfCircle * 2}`} >
                 <G rotation="-90" origin={`${halfCircle}, ${halfCircle}`}>
                     <AnimatedCircle
-                        ref={circleRef}
                         r={radius}
                         stroke={color}
                         strokeDasharray={circumference}
-                        strokeDashoffset={circumference}
                         {...{
-                            strokeLinecap, strokeWidth, cx, cy, fill,
+                            strokeDashoffset, strokeLinecap, strokeWidth, cx, cy, fill,
                         }}
                     />
 
                     <Circle
                         r={radius}
-                        stroke={color}
                         strokeOpacity=".1"
                         {...{
                             strokeLinejoin, strokeWidth, cx, cy, fill

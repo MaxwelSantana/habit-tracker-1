@@ -9,7 +9,10 @@ export default function AppList() {
 	return (
 		<View style={styles.container}>
 
-			<CircularProgress />
+			<CircularProgress percentage={50} color='black' />
+			<CircularProgress percentage={75} color='blue' />
+			<CircularProgress percentage={90} color='black' />
+			<CircularProgress percentage={65} color='blue' />
 
 			<Text>List!</Text>
 			<StatusBar style="light" />
