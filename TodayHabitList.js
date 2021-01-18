@@ -8,7 +8,7 @@ export default class TodayHabitList extends Component {
 			<View style={styles.container}>
 				<SectionList
 					sections={[
-						{ title: 'Manhã', data: ['Devin', 'Dan', 'Dominic'] },
+						{ title: 'Manhã', data: ['Devin ', 'Dan', 'Dominic'] },
 						{ title: 'Tarde', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie'] },
 					]}
 					renderItem={({ item }) => <HabitItem name={item} ></HabitItem>}

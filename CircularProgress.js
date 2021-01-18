@@ -45,10 +45,6 @@ export default function CircularProgress({
                 easing: Easing.linear
             }
         ).start();
-        console.log('##############################################');
-        animated.addListener((v) => {
-            console.log(v.value, strokeDashoffset);
-        });
 
         return () => {
             animated.removeAllListeners();
