@@ -16,7 +16,8 @@ export default function HabitItem(props) {
             <View style={styles.content}>
                 <CircularProgress
                     style={styles.circularProgress}
-                    percentage={100}
+                    percentage={1}
+                    max={5}
                     size={33}
                     strokeWidth={5}
                     color={color}
@@ -56,9 +57,11 @@ const styles = StyleSheet.create({
         shadowColor: "#1F2E46",
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: 1,
         },
-        shadowRadius: 4,
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
     },
     content: {
         flex: 1,
