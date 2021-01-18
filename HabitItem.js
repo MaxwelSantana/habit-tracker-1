@@ -4,6 +4,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import CircularProgress from './CircularProgress';
 import DefaultText from './DefaultText';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Icon } from 'react-native-elements'
+import { Divider } from 'react-native-elements';
 
 export default function HabitItem(props) {
     const size = 25;
@@ -14,9 +17,9 @@ export default function HabitItem(props) {
                 <CircularProgress
                     style={styles.circularProgress}
                     percentage={100}
-                    size={38}
+                    size={33}
                     strokeWidth={5}
-                    color='#1F8DFC'
+                    color={color}
                 >
                     <MaterialCommunityIcons name="water" {...{ size, color }} />
                 </CircularProgress>
@@ -25,26 +28,37 @@ export default function HabitItem(props) {
                     <DefaultText style={styles.motivationPhrase}>Go for it</DefaultText>
                 </View>
                 <View style={styles.goalsBlock}>
-                    <DefaultText style={styles.goalsProgress}>1/5</DefaultText>
+                    <DefaultText style={styles.goalsProgress, { color }}>1/5</DefaultText>
                     <DefaultText style={styles.goalsTitle}>copos</DefaultText>
                 </View>
             </View>
             <View style={styles.actions}>
-
+                <FontAwesome5 name="check" size={20} color='#E9EAFA' />
             </View>
         </TouchableOpacity>
     );
 }
+/* 
+<FontAwesome5 style={styles.iconShadow} name="check" size={20} color='#E9EAFA' /> 
+<Icon iconStyle={styles.iconShadow} name='check' type='font-awesome' color='#E9EAFA' size={25} />
+*/
 
 const styles = StyleSheet.create({
     item: {
+        height: 60,
         flexDirection: 'row',
         padding: 10,
+        paddingRight: 0,
         fontSize: 18,
         backgroundColor: '#3C4858',
         marginBottom: 10,
-        marginTop: 10,
         borderRadius: 10,
+        shadowColor: "#1F2E46",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowRadius: 4,
     },
     content: {
         flex: 1,
@@ -53,7 +67,7 @@ const styles = StyleSheet.create({
     circularProgress: {},
     titleBlock: {
         flex: 1,
-        marginLeft: 20,
+        marginLeft: 12,
         justifyContent: 'center',
     },
     title: {
@@ -67,14 +81,13 @@ const styles = StyleSheet.create({
         color: 'rgba(233, 234, 250, 0.45)',
     },
     goalsBlock: {
-        alignItems: 'flex-end', 
-        marginRight: 20,
+        alignItems: 'flex-end',
+        marginRight: 12,
         justifyContent: 'center',
     },
     goalsProgress: {
         fontSize: 16,
         lineHeight: 18,
-        color: '#1F8DFC'
     },
     goalsTitle: {
         fontSize: 10,
@@ -82,9 +95,20 @@ const styles = StyleSheet.create({
         color: 'rgba(233, 234, 250, 0.45)',
     },
     actions: {
-        width: 40,
+        borderLeftWidth: 1,
+        borderLeftColor: '#465161',
+        width: 40 + 1,
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
-        backgroundColor: 'blue',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    iconShadow: {
+        shadowColor: "#1F2E46",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowRadius: 4,
     }
 })
