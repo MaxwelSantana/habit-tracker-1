@@ -12,11 +12,12 @@ const cy = "50%";
 
 export default function CircularProgress({
     strokeWidth = 3,
-    percentage = 90,
-    max = 100,
+    done = 90,
+    total = 100,
     size = 20,
-    duration = percentage * 5,
+    duration = done * 5,
     color = "#1F8DFC",
+    opacity = 1,
     children
 }) {
     const radius = (size + strokeWidth) / 2;
@@ -24,8 +25,8 @@ export default function CircularProgress({
     const halfCircle = radius + strokeWidth;
     const animated = new Animated.Value(0);
 
-    percentage = percentage > max ? max : percentage < 0 ? 0 : percentage;
-    const maxPerc = 100 * percentage / max;
+    done = done > total ? total : done < 0 ? 0 : done;
+    const maxPerc = 100 * done / total;
     const circumferenceProgress = (circumference * maxPerc) / 100;
 
     const strokeDashoffset = animated.interpolate({
@@ -63,6 +64,7 @@ export default function CircularProgress({
                         r={radius}
                         stroke={color}
                         strokeDasharray={circumference}
+                        strokeOpacity={opacity}
                         {...{
                             strokeDashoffset, strokeLinecap, strokeWidth, cx, cy, fill,
                         }}
@@ -77,7 +79,7 @@ export default function CircularProgress({
                     />
                 </G>
             </Svg>
-            <View style={[StyleSheet.absoluteFillObject, styles.icon]}>
+            <View style={[StyleSheet.absoluteFillObject, styles.icon, { opacity }]}>
                 {children}
             </View>
         </View>
