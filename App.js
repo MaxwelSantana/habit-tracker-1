@@ -14,10 +14,11 @@ const theme = {
 };
 
 export default function App() {
+  const statusBar = false;
   return (
     <PaperProvider theme={theme}>
       <AppTab />
-      <StatusBar style="light" />
+      { statusBar && <StatusBar style="light" />}
     </PaperProvider>
   );
 }
