@@ -8,6 +8,7 @@ import { IconButton, Colors } from 'react-native-paper';
 import AppList from './AppList';
 import AppForm from './AppForm';
 import TodayHabitList from './TodayHabitList';
+import WeekCalendar from './WeeklyCalendar/WeekCalendar';
 
 import homeIcon from './assets/home.png';
 import barchartIcon from './assets/bar-chart.png';
@@ -57,7 +58,7 @@ function AppTab({ navigation }) {
 					activeTintColor: '#1B8FFF'
 				}}
 			>
-				<Screen name="Home" component={TodayHabitList}
+				<Screen name="Home" component={WeekCalendar}
 					options={{
 						tabBarLabel: "Compras",
 						tabBarIcon: ({ color, size }) => (
@@ -65,7 +66,7 @@ function AppTab({ navigation }) {
 						),
 					}}
 				/>
-				<Screen name="Stats" component={AppForm}
+				<Screen name="Stats" component={TodayHabitList}
 					options={{
 						tabBarLabel: "Adicionar",
 						tabBarIcon: ({ color, size }) => (
