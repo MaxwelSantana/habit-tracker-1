@@ -6,16 +6,17 @@ import PropTypes from "prop-types";
 let containerCount = 0;
 
 class CellContainer extends Component {
-    constructor(args) {
-        super(args);
+    constructor(props) {
+        super(props);
         this._containerId = containerCount++;
     }
 
     render() {
+        const { date, ...rest } = this.props;
         return (
-            <View {...this.props}>
-                {this.props.children}
-                <Text>Cell Id: {this._containerId}</Text>
+            <View {...rest}>
+                <Text>{date.format("ddd").toUpperCase()}</Text>
+                <Text>{date.format("DD/MM").toUpperCase()}</Text>
             </View>
         );
     }
@@ -25,6 +26,7 @@ export default class Scroller extends Component {
     static propTypes = {
         data: PropTypes.array.isRequired,
         size: PropTypes.number,
+        initialRenderIndex: PropTypes.number,
     }
 
     constructor(props) {
@@ -85,6 +87,7 @@ export default class Scroller extends Component {
             newState = { ...newState, ...this.updateDaysData(data) };
         }
 
+        console.log('updateState', updateState)
         if (updateState) {
             this.setState(newState);
         }
@@ -100,9 +103,9 @@ export default class Scroller extends Component {
 
     //Given type and data return the view component
     _rowRenderer(type, data) {
+        console.log('data', data)
         return (
-            <CellContainer style={styles.container}>
-                <Text>{data}</Text>
+            <CellContainer date={data.date} style={styles.container}>
             </CellContainer>
         );
     }
@@ -114,6 +117,7 @@ export default class Scroller extends Component {
                 dataProvider={this.state.dataProvider}
                 rowRenderer={this._rowRenderer}
                 isHorizontal
+                initialRenderIndex={this.props.initialRenderIndex}
             />
         );
     }
