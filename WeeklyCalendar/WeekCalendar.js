@@ -1,11 +1,30 @@
 
 import React, { Component } from "react";
-import { View, PixelRatio, Text } from "react-native";
+import PropTypes from "prop-types";
+import { View, PixelRatio, Text, StyleSheet } from "react-native";
 import Scroller from './Scroller';
 import CalendarStripExample from './CalendarStripExample';
 import moment from "moment";
 
 export default class WeekCalendar extends Component {
+    static propTypes = {
+        startingDate: PropTypes.any,
+        selectedDate: PropTypes.any,
+        numDaysInWeek: PropTypes.number,
+        firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
+        maxDayComponentSize: PropTypes.number,
+        minDayComponentSize: PropTypes.number,
+        localeName: PropTypes.oneOf(moment.locales())
+    }
+
+    static defaultProps = {
+        numDaysInWeek: 7,
+        firstDayOfWeek: 1,
+        maxDayComponentSize: 80,
+        minDayComponentSize: 10,
+        localeName: "en"
+    }
+
 
     constructor(props) {
         super(props);
@@ -19,10 +38,8 @@ export default class WeekCalendar extends Component {
             selectedDate,
             dateList: [],
             dayComponentWidth: 0,
-            numDaysInWeek: 7,
-            maxDayComponentSize: 80,
-            minDayComponentSize: 10,
             marginHorizontal: 0,
+            initialScrollerIndex: 0,
         }
 
         this.layout = {};
@@ -30,7 +47,6 @@ export default class WeekCalendar extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (!this.compareDates(prevProps.startingDate, this.props.startingDate)) {
-            console.log('componentDidUpdate')
             let _startingDate = this.props.startingDate || this.state.startingDate;
 
             startingDate = { startingDate: this.setLocale(_startingDate) };
@@ -55,8 +71,9 @@ export default class WeekCalendar extends Component {
         let _date = date && moment(date);
         if (_date) {
             _date.set({ hour: 12 }); // keep date the same regardless of timezone shifts
-            if (this.props.locale) {
-                _date = _date.locale(this.props.locale.name);
+            if (this.props.localeName) {
+                const weekFirstDay = { week: { dow: this.props.firstDayOfWeek } };
+                _date = _date.locale(this.props.localeName, weekFirstDay);
             }
         }
         return _date;
@@ -69,7 +86,7 @@ export default class WeekCalendar extends Component {
             // Fallback when startingDate isn't provided. However selectedDate
             // may also be undefined, defaulting to today's date.
             let date = this.setLocale(moment(this.props.selectedDate));
-            return this.props.useIsoWeekday ? date.startOf("isoweek") : date;
+            return date.startOf("week");
         }
     }
 
@@ -92,22 +109,21 @@ export default class WeekCalendar extends Component {
             numDaysInWeek,
             maxDayComponentSize,
             minDayComponentSize,
-        } = this.state;
+        } = this.props;
         const csWidth = PixelRatio.roundToNearestPixel(layout.width);
         let dayComponentWidth = csWidth / numDaysInWeek;
         dayComponentWidth = Math.min(dayComponentWidth, maxDayComponentSize);
         dayComponentWidth = Math.max(dayComponentWidth, minDayComponentSize);
 
-        const marginHorizontal = Math.round(dayComponentWidth * 0.05);
-        dayComponentWidth = Math.round(dayComponentWidth * 0.9);
+        console.log({ csWidth, numDaysInWeek, dayComponentWidth })
+        //const marginHorizontal = Math.round(dayComponentWidth * 0.05);
+        //dayComponentWidth = Math.round(dayComponentWidth * 0.9);
 
         this.setState({
             dayComponentWidth,
-            marginHorizontal
+            marginHorizontal: 0
         });
         this.createDays(this.state.startingDate);
-        console.log('marginHorizontal', marginHorizontal);
-        console.log('dayComponentWidth', dayComponentWidth);
     }
 
     createDays = (startingDate, selectedDate = this.state.selectedDate) => {
@@ -115,16 +131,16 @@ export default class WeekCalendar extends Component {
             numDaysInWeek,
         } = this.props;
 
-        let _startingDate = startingDate;
+        let startLeftDate = startingDate;
         let days = [];
         let dateList = [];
         let initialScrollerIndex;
         const numDays = this.numDaysScroll;
 
-        _startingDate = startingDate.clone().subtract(numDays / 2, "days");
+        startLeftDate = startingDate.clone().subtract(numDays / 2, "days");
 
         for (let i = 0; i < numDays; i++) {
-            let date = this.setLocale(_startingDate.clone().add(i, "days"));
+            let date = this.setLocale(startLeftDate.clone().add(i, "days"));
 
             if (date.isSame(startingDate, "day")) {
                 initialScrollerIndex = i;
@@ -133,15 +149,16 @@ export default class WeekCalendar extends Component {
         }
 
         this.setState({ dateList, initialScrollerIndex });
-        console.log('datesList', dateList.length);
-        console.log('this.state.dateList', this.state.dateList.length);
     }
 
     render() {
         return (
-            <View>
+            <View style={{
+                height: 60,
+                marginTop: 200,
+            }}>
                 <View
-                    style={{ height: 60, marginTop: 200 }}
+                    style={styles.calendarDates}
                     onLayout={this.onLayout}>
                     {
                         this.state.dateList.length > 0 ?
@@ -150,12 +167,24 @@ export default class WeekCalendar extends Component {
                                 size={this.state.dayComponentWidth}
                                 marginHorizontal={this.state.marginHorizontal}
                                 initialRenderIndex={this.state.initialScrollerIndex}
+                                pagingEnabled={true}
+                                firstDayOfWeek={this.props.firstDayOfWeek}
                             /> : <Text>teste menor 0</Text>
                     }
                 </View>
-                <CalendarStripExample />
             </View>
-
         );
     }
 }
+/*
+<CalendarStripExample style={{marginTop: 100}} />
+*/
+
+const styles = StyleSheet.create({
+    calendarDates: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+});

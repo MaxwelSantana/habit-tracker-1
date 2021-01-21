@@ -65,7 +65,7 @@ export default class CalendarStripExample extends Component {
 
   render() {
     return (
-      <View>
+      <View style={this.props.style}>
         <CalendarStrip
           scrollable
           calendarAnimation={{type: 'sequence', duration: 30}}
@@ -82,6 +82,7 @@ export default class CalendarStripExample extends Component {
           datesBlacklist={this.datesBlacklistFunc}
           onDateSelected={this.onDateSelected}
           useIsoWeekday={false}
+          scrollerPaging={true}
         />
         <Text style={{fontSize: 24}}>Selected Date: {this.state.formattedDate}</Text>
       </View>

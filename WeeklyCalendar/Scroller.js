@@ -16,7 +16,7 @@ class CellContainer extends Component {
         return (
             <View {...rest}>
                 <Text>{date.format("ddd").toUpperCase()}</Text>
-                <Text>{date.format("DD/MM").toUpperCase()}</Text>
+                <Text>{date.format("DD").toUpperCase()}</Text>
             </View>
         );
     }
@@ -26,11 +26,21 @@ export default class Scroller extends Component {
     static propTypes = {
         data: PropTypes.array.isRequired,
         size: PropTypes.number,
+        marginHorizontal: PropTypes.number,
         initialRenderIndex: PropTypes.number,
+        pagingEnabled: PropTypes.bool,
+        firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
     }
+
+    static defaultProps = {
+        data: [],
+        marginHorizontal: 0,
+    };
 
     constructor(props) {
         super(props);
+
+        this.timeoutResetPositionId = null;
 
         const { data, size, marginHorizontal } = props;
 
@@ -62,12 +72,14 @@ export default class Scroller extends Component {
             }
         }
 
-        this._rowRenderer = this._rowRenderer.bind(this);
+        this._rowRenderer = this.rowRenderer.bind(this);
 
         this.state = {
             ...this.updateLayout(size, marginHorizontal),
             ...this.updateDaysData(data),
             numVisibleItems: 1, // updated in onLayout
+            layoutWidth: 1,
+            visibleStartIndex: 0,
         };
     }
 
@@ -87,64 +99,124 @@ export default class Scroller extends Component {
             newState = { ...newState, ...this.updateDaysData(data) };
         }
 
-        console.log('updateState', updateState)
         if (updateState) {
             this.setState(newState);
         }
     }
 
-    _generateArray(n) {
-        let arr = new Array(n);
-        for (let i = 0; i < n; i++) {
-            arr[i] = `wuuo${i}`;
+    onVisibleIndicesChanged = (all, now, notNow) => {
+        const { data, } = this.state;
+
+        const visibleStartIndex = all[0];
+        const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
+
+        this.setState({ visibleStartIndex });
+        console.log({
+            all0:all[0],
+            now,
+            all: all.length,
+            visibleStartDate: visibleStartDate.format('DD/MM/YYYY'),
+            layoutWidth: this.state.layoutWidth,
+            numVisibleItems: this.state.numVisibleItems,
+            itemWidth: this.state.itemWidth
+        });
+    }
+
+    changeIndiceToStartWeekDay = (visibleStartIndex) => {
+        if (this.shifting)
+            return;
+
+        const { data, } = this.state;
+        const { firstDayOfWeek } = this.props;
+
+        const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
+        const weekday = visibleStartDate ? visibleStartDate.weekday() : 0;
+        const diffDays = firstDayOfWeek - weekday;
+
+        if (diffDays > 0) {
+            //this.shifting = true;
+            this.rlv.scrollToIndex(visibleStartIndex - diffDays, false);
+            /*
+            this.timeoutResetPositionId = setTimeout(() => {
+                this.timeoutResetPositionId = null;
+                this.rlv.scrollToIndex(visibleStartIndex - diffDays, false);
+                this.shifting = false; // debounce
+            }, 800);*/
         }
-        return arr;
+    }
+
+
+    onLayout = event => {
+        let width = event.nativeEvent.layout.width;
+        this.setState({
+            layoutWidth: width,
+            numVisibleItems: Math.round(width / this.state.itemWidth),
+        });
     }
 
     //Given type and data return the view component
-    _rowRenderer(type, data) {
-        console.log('data', data)
+    rowRenderer = (type, data) => {
         return (
-            <CellContainer date={data.date} style={styles.container}>
-            </CellContainer>
-        );
-    }
-
-    render() {
-        return (
-            <RecyclerListView
-                layoutProvider={this.state.layoutProvider}
-                dataProvider={this.state.dataProvider}
-                rowRenderer={this._rowRenderer}
-                isHorizontal
-                initialRenderIndex={this.props.initialRenderIndex}
+            <CellContainer
+                date={data.date}
+                style={[
+                    {
+                        flex: 1,
+                        justifyContent: "space-around",
+                        alignItems: "center",
+                        backgroundColor: "#00a1f1",
+                        margin: this.props.marginHorizontal
+                    }
+                ]}
             />
         );
     }
-}
 
-const styles = StyleSheet.create({
-    list: {
-        height: 60,
-        paddingTop: 200,
-        flex: 1
-    },
-    container: {
-        justifyContent: "space-around",
-        alignItems: "center",
-        flex: 1,
-        backgroundColor: "#00a1f1"
-    },
-    containerGridLeft: {
-        justifyContent: "space-around",
-        alignItems: "center",
-        flex: 1,
-        backgroundColor: "#ffbb00"
-    },
-    containerGridRight: {
-        justifyContent: "space-around",
-        alignItems: "center",
-        flex: 1,
-        backgroundColor: "#7cbb00"
+    onMomentumScrollEnd = (event) => {
+        const { data, } = this.state;
+        const visibleStartIndex = this.state.visibleStartIndex;
+
+        const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
+
+        console.log('onMomentumScrollEnd', this.state.visibleStartIndex, visibleStartDate.format('DD/MM/YYYY'));
+        //this.changeIndiceToStartWeekDay(this.state.visibleStartIndex);
     }
-});
+
+    render() {
+        if (!this.state.data || this.state.numDays === 0 || !this.state.itemHeight) {
+            return null;
+        }
+
+        const pagingProps = this.props.pagingEnabled ? {
+            decelerationRate: 0,
+            snapToInterval: this.state.itemWidth * this.state.numVisibleItems,
+        } : {};
+
+        return (
+            <View
+                style={{
+                    height: this.state.itemHeight,
+                    flex: 1,
+                    paddingLeft: 1,
+                    paddingRight: 1
+                }}
+                onLayout={this.onLayout}
+            >
+                <RecyclerListView
+                    ref={rlv => this.rlv = rlv}
+                    layoutProvider={this.state.layoutProvider}
+                    dataProvider={this.state.dataProvider}
+                    rowRenderer={this.rowRenderer}
+                    isHorizontal
+                    initialRenderIndex={this.props.initialRenderIndex}
+                    onVisibleIndicesChanged={this.onVisibleIndicesChanged}
+                    scrollViewProps={{
+                        showsHorizontalScrollIndicator: false,
+                        ...pagingProps
+                    }}
+                    onMomentumScrollEnd={this.onMomentumScrollEnd}
+                />
+            </View>
+        );
+    }
+}
