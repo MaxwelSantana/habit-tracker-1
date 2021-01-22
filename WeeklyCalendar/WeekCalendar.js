@@ -19,26 +19,25 @@ export default class WeekCalendar extends Component {
 
     static defaultProps = {
         numDaysInWeek: 7,
-        firstDayOfWeek: 1,
+        firstDayOfWeek: 0,
         maxDayComponentSize: 80,
         minDayComponentSize: 10,
         localeName: "en"
     }
 
-
     constructor(props) {
         super(props);
-        this.numDaysScroll = 366;
+        this.numWeeksScroll = 40;
 
         const startingDate = this.getInitialStartingDate();
         const selectedDate = this.setLocale(this.props.selectedDate);
 
+        console.log({ startingDate, selectedDate });
         this.state = {
             startingDate,
             selectedDate,
             dateList: [],
             dayComponentWidth: 0,
-            marginHorizontal: 0,
             initialScrollerIndex: 0,
         }
 
@@ -112,16 +111,16 @@ export default class WeekCalendar extends Component {
         } = this.props;
         const csWidth = PixelRatio.roundToNearestPixel(layout.width);
         let dayComponentWidth = csWidth / numDaysInWeek;
+
         dayComponentWidth = Math.min(dayComponentWidth, maxDayComponentSize);
         dayComponentWidth = Math.max(dayComponentWidth, minDayComponentSize);
 
-        console.log({ csWidth, numDaysInWeek, dayComponentWidth })
         //const marginHorizontal = Math.round(dayComponentWidth * 0.05);
         //dayComponentWidth = Math.round(dayComponentWidth * 0.9);
+        dayComponentWidth = Math.round(dayComponentWidth * 0.9);
 
         this.setState({
             dayComponentWidth,
-            marginHorizontal: 0
         });
         this.createDays(this.state.startingDate);
     }
@@ -135,9 +134,10 @@ export default class WeekCalendar extends Component {
         let days = [];
         let dateList = [];
         let initialScrollerIndex;
-        const numDays = this.numDaysScroll;
+        const weeks = this.numWeeksScroll;
+        const numDays = weeks * 7;
 
-        startLeftDate = startingDate.clone().subtract(numDays / 2, "days");
+        startLeftDate = startingDate.clone().subtract(weeks / 2, "weeks");
 
         for (let i = 0; i < numDays; i++) {
             let date = this.setLocale(startLeftDate.clone().add(i, "days"));
@@ -158,17 +158,21 @@ export default class WeekCalendar extends Component {
                 marginTop: 200,
             }}>
                 <View
-                    style={styles.calendarDates}
+                    style={[{
+                        width: 371,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }]}
                     onLayout={this.onLayout}>
                     {
                         this.state.dateList.length > 0 ?
                             <Scroller
                                 data={this.state.dateList}
                                 size={this.state.dayComponentWidth}
-                                marginHorizontal={this.state.marginHorizontal}
                                 initialRenderIndex={this.state.initialScrollerIndex}
                                 pagingEnabled={true}
                                 firstDayOfWeek={this.props.firstDayOfWeek}
+                                numVisibleItems={this.props.numDaysInWeek}
                             /> : <Text>teste menor 0</Text>
                     }
                 </View>

@@ -25,11 +25,12 @@ class CellContainer extends Component {
 export default class Scroller extends Component {
     static propTypes = {
         data: PropTypes.array.isRequired,
-        size: PropTypes.number,
-        marginHorizontal: PropTypes.number,
-        initialRenderIndex: PropTypes.number,
+        size: PropTypes.number.isRequired,
+        numVisibleItems: PropTypes.number.isRequired,
+        firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]).isRequired,
+        initialRenderIndex: PropTypes.number.isRequired,
         pagingEnabled: PropTypes.bool,
-        firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
+        marginHorizontal: PropTypes.number,
     }
 
     static defaultProps = {
@@ -42,15 +43,15 @@ export default class Scroller extends Component {
 
         this.timeoutResetPositionId = null;
 
-        const { data, size, marginHorizontal } = props;
+        const { data, size, numVisibleItems } = props;
 
         const dataProvider = new DataProvider((r1, r2) => {
             return r1 !== r2;
         });
 
-        this.updateLayout = (size, marginHorizontal = 0) => {
+        this.updateLayout = (size) => {
             const itemHeight = size;
-            const itemWidth = itemHeight + marginHorizontal * 2;
+            const itemWidth = size;
 
             const layoutProvider = new LayoutProvider(
                 index => 0, // only 1 view type
@@ -64,34 +65,72 @@ export default class Scroller extends Component {
             return { layoutProvider, itemHeight, itemWidth };
         }
 
-        this.updateDaysData = data => {
+        this.updateContainer = (numVisibleItems, size) => {
+            const containerWidth = size * numVisibleItems;
+            return { containerWidth, numVisibleItems };
+        }
+
+        this.updateScrollOffsetsStops = (data, numVisibleItems, size) => {
+            const numStops = data.length / numVisibleItems;
+
+            const scrollOffsetsStops = [...Array(numStops)]
+                .map((_, idx) =>
+                    (idx * (numVisibleItems * size)));
+
+            console.log({ scrollOffsetsStops })
+            return { scrollOffsetsStops };
+        }
+
+        this.updateDaysData = (data) => {
             return {
                 data,
                 numDays: data.length,
                 dataProvider: dataProvider.cloneWithRows(data),
-            }
+            };
         }
 
         this._rowRenderer = this.rowRenderer.bind(this);
 
         this.state = {
-            ...this.updateLayout(size, marginHorizontal),
+            ...this.updateLayout(size),
+            ...this.updateContainer(numVisibleItems, size),
             ...this.updateDaysData(data),
-            numVisibleItems: 1, // updated in onLayout
-            layoutWidth: 1,
-            visibleStartIndex: 0,
+            ...this.updateScrollOffsetsStops(data, numVisibleItems, size),
         };
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const { data, size, marginHorizontal } = this.props;
+    componentDidMount() {
+        setTimeout(() => {
+            console.log('componentDidMount()')
+            console.log(this.rlv.getCurrentRenderAheadOffset());
+            console.log(this.rlv.getContentDimension());
+            console.log(this.rlv.getLayout(0));
+            console.log(this.rlv.getRenderedSize());
+            console.log(this.rlv.getCurrentScrollOffset());
+            //console.log(this.rlv.getVirtualRenderer());
+            const _virtualRenderer = this.rlv.getVirtualRenderer();
 
+        }, 1);
+        //console.log('scrolling...')
+        //setTimeout(() => { this.rlv.scrollToIndex(273); }, 1) // scroll view position fix
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { data, size, numVisibleItems } = this.props;
         let newState = {};
         let updateState = false;
 
         if (size !== prevProps.size) {
             updateState = true;
-            newState = this.updateLayout(size, marginHorizontal);
+            newState = this.updateLayout(size);
+        }
+
+        if (size !== prevProps.size || numVisibleItems !== prevProps.numVisibleItems) {
+            updateState = true;
+            newState = { ...newState, ...this.updateContainer(numVisibleItems, size) };
+
+            if (data !== prevProps.data)
+                newState = { ...newState, ...this.updateScrollOffsetsStops(data, numVisibleItems, size) }
         }
 
         if (data !== prevProps.data) {
@@ -111,10 +150,10 @@ export default class Scroller extends Component {
         const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
 
         this.setState({ visibleStartIndex });
+
         console.log({
-            all0:all[0],
-            now,
             all: all.length,
+            visibleStartIndex,
             visibleStartDate: visibleStartDate.format('DD/MM/YYYY'),
             layoutWidth: this.state.layoutWidth,
             numVisibleItems: this.state.numVisibleItems,
@@ -122,35 +161,13 @@ export default class Scroller extends Component {
         });
     }
 
-    changeIndiceToStartWeekDay = (visibleStartIndex) => {
-        if (this.shifting)
-            return;
-
-        const { data, } = this.state;
-        const { firstDayOfWeek } = this.props;
-
-        const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
-        const weekday = visibleStartDate ? visibleStartDate.weekday() : 0;
-        const diffDays = firstDayOfWeek - weekday;
-
-        if (diffDays > 0) {
-            //this.shifting = true;
-            this.rlv.scrollToIndex(visibleStartIndex - diffDays, false);
-            /*
-            this.timeoutResetPositionId = setTimeout(() => {
-                this.timeoutResetPositionId = null;
-                this.rlv.scrollToIndex(visibleStartIndex - diffDays, false);
-                this.shifting = false; // debounce
-            }, 800);*/
-        }
-    }
-
-
     onLayout = event => {
         let width = event.nativeEvent.layout.width;
+        const diff = Math.abs(this.state.containerWidth - width);
+        console.log({ diff });
         this.setState({
             layoutWidth: width,
-            numVisibleItems: Math.round(width / this.state.itemWidth),
+            diff
         });
     }
 
@@ -159,27 +176,30 @@ export default class Scroller extends Component {
         return (
             <CellContainer
                 date={data.date}
-                style={[
-                    {
-                        flex: 1,
-                        justifyContent: "space-around",
-                        alignItems: "center",
-                        backgroundColor: "#00a1f1",
-                        margin: this.props.marginHorizontal
-                    }
-                ]}
+                style={styles.cellContainer}
             />
         );
     }
 
     onMomentumScrollEnd = (event) => {
-        const { data, } = this.state;
+        const { data, scrollOffsetsStops } = this.state;
         const visibleStartIndex = this.state.visibleStartIndex;
+        const offsetX = event.nativeEvent.contentOffset.x;
 
         const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
-
         console.log('onMomentumScrollEnd', this.state.visibleStartIndex, visibleStartDate.format('DD/MM/YYYY'));
-        //this.changeIndiceToStartWeekDay(this.state.visibleStartIndex);
+        console.log('onMomentumScrollEnd', {
+            contentOffset: event.nativeEvent.contentOffset
+        });
+
+        if (!scrollOffsetsStops.includes(offsetX)) {
+            const closest = scrollOffsetsStops.reduce((a, b) => {
+                return Math.abs(b - offsetX) < Math.abs(a - offsetX) ? b : a;
+            });
+            const index = scrollOffsetsStops.findIndex((item) => item === closest) * 7;
+            console.log({ closest, index });
+            //this.rlv.scrollToIndex(index, false);
+        }
     }
 
     render() {
@@ -189,16 +209,17 @@ export default class Scroller extends Component {
 
         const pagingProps = this.props.pagingEnabled ? {
             decelerationRate: 0,
-            snapToInterval: this.state.itemWidth * this.state.numVisibleItems,
+            snapToInterval: this.state.containerWidth,
+            //snapToOffsets: this.state.scrollOffsetsStops,
+            snapToEnd: true,
+            snapToStart: false,
         } : {};
 
         return (
             <View
                 style={{
                     height: this.state.itemHeight,
-                    flex: 1,
-                    paddingLeft: 1,
-                    paddingRight: 1
+                    width: this.state.containerWidth,
                 }}
                 onLayout={this.onLayout}
             >
@@ -212,11 +233,24 @@ export default class Scroller extends Component {
                     onVisibleIndicesChanged={this.onVisibleIndicesChanged}
                     scrollViewProps={{
                         showsHorizontalScrollIndicator: false,
-                        ...pagingProps
+                        ...pagingProps,
                     }}
                     onMomentumScrollEnd={this.onMomentumScrollEnd}
+                    canChangeSize={false}
+                    renderAheadOffset={2000}
                 />
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    cellContainer: {
+        flex: 1,
+        justifyContent: "space-around",
+        alignItems: "center",
+        backgroundColor: "#00a1f1",
+        borderColor: 'black',
+        borderWidth: 1
+    }
+})
