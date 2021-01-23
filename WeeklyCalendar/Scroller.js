@@ -12,11 +12,12 @@ class CellContainer extends Component {
     }
 
     render() {
-        const { date, ...rest } = this.props;
+        const { date, index, ...rest } = this.props;
         return (
             <View {...rest}>
                 <Text>{date.format("ddd").toUpperCase()}</Text>
                 <Text>{date.format("DD").toUpperCase()}</Text>
+                <Text>{index}</Text>
             </View>
         );
     }
@@ -30,12 +31,10 @@ export default class Scroller extends Component {
         firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]).isRequired,
         initialRenderIndex: PropTypes.number.isRequired,
         pagingEnabled: PropTypes.bool,
-        marginHorizontal: PropTypes.number,
     }
 
     static defaultProps = {
         data: [],
-        marginHorizontal: 0,
     };
 
     constructor(props) {
@@ -77,7 +76,6 @@ export default class Scroller extends Component {
                 .map((_, idx) =>
                     (idx * (numVisibleItems * size)));
 
-            console.log({ scrollOffsetsStops })
             return { scrollOffsetsStops };
         }
 
@@ -96,23 +94,8 @@ export default class Scroller extends Component {
             ...this.updateContainer(numVisibleItems, size),
             ...this.updateDaysData(data),
             ...this.updateScrollOffsetsStops(data, numVisibleItems, size),
+            scroll: { offsetX: 0, offsetY: 0 },
         };
-    }
-
-    componentDidMount() {
-        setTimeout(() => {
-            console.log('componentDidMount()')
-            console.log(this.rlv.getCurrentRenderAheadOffset());
-            console.log(this.rlv.getContentDimension());
-            console.log(this.rlv.getLayout(0));
-            console.log(this.rlv.getRenderedSize());
-            console.log(this.rlv.getCurrentScrollOffset());
-            //console.log(this.rlv.getVirtualRenderer());
-            const _virtualRenderer = this.rlv.getVirtualRenderer();
-
-        }, 1);
-        //console.log('scrolling...')
-        //setTimeout(() => { this.rlv.scrollToIndex(273); }, 1) // scroll view position fix
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -144,61 +127,40 @@ export default class Scroller extends Component {
     }
 
     onVisibleIndicesChanged = (all, now, notNow) => {
-        const { data, } = this.state;
+        const { data, scroll } = this.state;
 
         const visibleStartIndex = all[0];
         const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
 
         this.setState({ visibleStartIndex });
-
         console.log({
             all: all.length,
             visibleStartIndex,
             visibleStartDate: visibleStartDate.format('DD/MM/YYYY'),
-            layoutWidth: this.state.layoutWidth,
-            numVisibleItems: this.state.numVisibleItems,
-            itemWidth: this.state.itemWidth
+            offsetX: scroll.offsetX
         });
     }
 
-    onLayout = event => {
-        let width = event.nativeEvent.layout.width;
-        const diff = Math.abs(this.state.containerWidth - width);
-        console.log({ diff });
-        this.setState({
-            layoutWidth: width,
-            diff
-        });
-    }
-
-    //Given type and data return the view component
-    rowRenderer = (type, data) => {
+    rowRenderer = (type, data, index) => {
         return (
             <CellContainer
                 date={data.date}
+                index={index}
                 style={styles.cellContainer}
             />
         );
     }
 
-    onMomentumScrollEnd = (event) => {
-        const { data, scrollOffsetsStops } = this.state;
-        const visibleStartIndex = this.state.visibleStartIndex;
-        const offsetX = event.nativeEvent.contentOffset.x;
+    onScroll = (rawEvent, offsetX, offsetY) => {
+        this.setState({ scroll: { offsetX, offsetY } });
+    }
 
-        const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
-        console.log('onMomentumScrollEnd', this.state.visibleStartIndex, visibleStartDate.format('DD/MM/YYYY'));
-        console.log('onMomentumScrollEnd', {
-            contentOffset: event.nativeEvent.contentOffset
-        });
-
-        if (!scrollOffsetsStops.includes(offsetX)) {
-            const closest = scrollOffsetsStops.reduce((a, b) => {
-                return Math.abs(b - offsetX) < Math.abs(a - offsetX) ? b : a;
-            });
-            const index = scrollOffsetsStops.findIndex((item) => item === closest) * 7;
-            console.log({ closest, index });
-            //this.rlv.scrollToIndex(index, false);
+    applyWindowCorrection = (offsetX, offsetY, windowCorrection) => {
+        const value = 1;
+        return {
+            startCorrection: 0, 
+            endCorrection: 0, 
+            windowShift: value,
         }
     }
 
@@ -209,10 +171,7 @@ export default class Scroller extends Component {
 
         const pagingProps = this.props.pagingEnabled ? {
             decelerationRate: 0,
-            snapToInterval: this.state.containerWidth,
-            //snapToOffsets: this.state.scrollOffsetsStops,
-            snapToEnd: true,
-            snapToStart: false,
+            snapToOffsets: this.state.scrollOffsetsStops,
         } : {};
 
         return (
@@ -235,9 +194,9 @@ export default class Scroller extends Component {
                         showsHorizontalScrollIndicator: false,
                         ...pagingProps,
                     }}
-                    onMomentumScrollEnd={this.onMomentumScrollEnd}
+                    onScroll={this.onScroll}
                     canChangeSize={false}
-                    renderAheadOffset={2000}
+                    applyWindowCorrection={this.applyWindowCorrection}
                 />
             </View>
         );

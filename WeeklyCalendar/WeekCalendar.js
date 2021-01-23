@@ -32,7 +32,6 @@ export default class WeekCalendar extends Component {
         const startingDate = this.getInitialStartingDate();
         const selectedDate = this.setLocale(this.props.selectedDate);
 
-        console.log({ startingDate, selectedDate });
         this.state = {
             startingDate,
             selectedDate,
@@ -115,8 +114,6 @@ export default class WeekCalendar extends Component {
         dayComponentWidth = Math.min(dayComponentWidth, maxDayComponentSize);
         dayComponentWidth = Math.max(dayComponentWidth, minDayComponentSize);
 
-        //const marginHorizontal = Math.round(dayComponentWidth * 0.05);
-        //dayComponentWidth = Math.round(dayComponentWidth * 0.9);
         dayComponentWidth = Math.round(dayComponentWidth * 0.9);
 
         this.setState({
@@ -126,10 +123,6 @@ export default class WeekCalendar extends Component {
     }
 
     createDays = (startingDate, selectedDate = this.state.selectedDate) => {
-        const {
-            numDaysInWeek,
-        } = this.props;
-
         let startLeftDate = startingDate;
         let days = [];
         let dateList = [];
@@ -159,9 +152,9 @@ export default class WeekCalendar extends Component {
             }}>
                 <View
                     style={[{
-                        width: 371,
-                        justifyContent: "center",
-                        alignItems: "center",
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center'
                     }]}
                     onLayout={this.onLayout}>
                     {
@@ -180,9 +173,6 @@ export default class WeekCalendar extends Component {
         );
     }
 }
-/*
-<CalendarStripExample style={{marginTop: 100}} />
-*/
 
 const styles = StyleSheet.create({
     calendarDates: {
