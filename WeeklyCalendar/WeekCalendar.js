@@ -18,18 +18,28 @@ export default class WeekCalendar extends Component {
     }
 
     static defaultProps = {
+        localeName: "en",
+        firstDayOfWeek: 1,
         numDaysInWeek: 7,
-        firstDayOfWeek: 0,
         maxDayComponentSize: 80,
         minDayComponentSize: 10,
-        localeName: "en"
     }
 
     constructor(props) {
         super(props);
         this.numWeeksScroll = 40;
+        const { localeName, firstDayOfWeek } = this.props;
 
+        this.updateLocale(localeName, firstDayOfWeek);
+
+        const weekFirstDay = { week: { dow: 1 } };
+        let dateTest = moment();
+        dateTest = dateTest.locale('en', weekFirstDay);
         const startingDate = this.getInitialStartingDate();
+        console.log({
+            startingDate: startingDate.startOf("week").format('ddd'),
+            dateTest: dateTest.startOf("week").format('ddd'),
+        });
         const selectedDate = this.setLocale(this.props.selectedDate);
 
         this.state = {
@@ -44,6 +54,11 @@ export default class WeekCalendar extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        const { localeName, firstDayOfWeek } = this.props;
+        if (prevProps.localeName !== localeName || prevProps.firstDayOfWeek !== firstDayOfWeek) {
+            this.updateLocale(localeName, firstDayOfWeek);
+        }
+
         if (!this.compareDates(prevProps.startingDate, this.props.startingDate)) {
             let _startingDate = this.props.startingDate || this.state.startingDate;
 
@@ -64,14 +79,21 @@ export default class WeekCalendar extends Component {
         }
     }
 
+    updateLocale = (locale, firstDayOfWeek) => {
+        moment.updateLocale(locale, {
+            week: {
+                dow: firstDayOfWeek
+            }
+        });
+    }
+
     //Function that checks if the locale is passed to the component and sets it to the passed date
     setLocale = date => {
         let _date = date && moment(date);
         if (_date) {
             _date.set({ hour: 12 }); // keep date the same regardless of timezone shifts
             if (this.props.localeName) {
-                const weekFirstDay = { week: { dow: this.props.firstDayOfWeek } };
-                _date = _date.locale(this.props.localeName, weekFirstDay);
+                _date = _date.locale(this.props.localeName);
             }
         }
         return _date;

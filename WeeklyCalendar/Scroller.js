@@ -133,12 +133,6 @@ export default class Scroller extends Component {
         const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
 
         this.setState({ visibleStartIndex });
-        console.log({
-            all: all.length,
-            visibleStartIndex,
-            visibleStartDate: visibleStartDate.format('DD/MM/YYYY'),
-            offsetX: scroll.offsetX
-        });
     }
 
     rowRenderer = (type, data, index) => {
