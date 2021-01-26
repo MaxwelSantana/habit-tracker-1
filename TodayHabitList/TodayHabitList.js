@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { SectionList, FlatList, StyleSheet, Text, View } from 'react-native';
-import HabitItem from './HabitItem';
-import DefaultText from './DefaultText';
+import HabitItem from '../Shared/HabitItem';
+import DefaultText from '../Shared/DefaultText';
 import CalendarHeader from "./CalendarHeader";
 
 export default class TodayHabitList extends Component {
