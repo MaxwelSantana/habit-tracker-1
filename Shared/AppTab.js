@@ -52,7 +52,7 @@ function AppTab({ navigation }) {
 					activeTintColor: '#1B8FFF'
 				}}
 			>
-				<Screen name="Home" component={WeekCalendar}
+				<Screen name="Home" component={TodayHabitList}
 					options={{
 						tabBarLabel: "Compras",
 						tabBarIcon: ({ color, size }) => (

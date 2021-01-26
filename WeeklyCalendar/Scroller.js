@@ -3,26 +3,6 @@ import { View, Text, Dimensions, StyleSheet, PixelRatio } from "react-native";
 import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview";
 import PropTypes from "prop-types";
 
-let containerCount = 0;
-
-class CellContainer extends Component {
-    constructor(props) {
-        super(props);
-        this._containerId = containerCount++;
-    }
-
-    render() {
-        const { date, index, ...rest } = this.props;
-        return (
-            <View {...rest}>
-                <Text>{date.format("ddd").toUpperCase()}</Text>
-                <Text>{date.format("DD").toUpperCase()}</Text>
-                <Text>{index}</Text>
-            </View>
-        );
-    }
-}
-
 export default class Scroller extends Component {
     static propTypes = {
         data: PropTypes.array.isRequired,
@@ -31,10 +11,13 @@ export default class Scroller extends Component {
         firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]).isRequired,
         initialRenderIndex: PropTypes.number.isRequired,
         pagingEnabled: PropTypes.bool,
+        renderDay: PropTypes.func,
+        renderDayParams: PropTypes.object.isRequired,
     }
 
     static defaultProps = {
         data: [],
+        renderDayParams: {},
     };
 
     constructor(props) {
@@ -135,14 +118,8 @@ export default class Scroller extends Component {
         this.setState({ visibleStartIndex });
     }
 
-    rowRenderer = (type, data, index) => {
-        return (
-            <CellContainer
-                date={data.date}
-                index={index}
-                style={styles.cellContainer}
-            />
-        );
+    rowRenderer = (type, data, index, extState) => {
+        return this.props.renderDay && this.props.renderDay({ ...data, index, ...extState });
     }
 
     onScroll = (rawEvent, offsetX, offsetY) => {
@@ -152,8 +129,8 @@ export default class Scroller extends Component {
     applyWindowCorrection = (offsetX, offsetY, windowCorrection) => {
         const value = 1;
         return {
-            startCorrection: 0, 
-            endCorrection: 0, 
+            startCorrection: 0,
+            endCorrection: 0,
             windowShift: value,
         }
     }
@@ -181,6 +158,7 @@ export default class Scroller extends Component {
                     layoutProvider={this.state.layoutProvider}
                     dataProvider={this.state.dataProvider}
                     rowRenderer={this.rowRenderer}
+                    extendedState={this.props.renderDayParams}
                     isHorizontal
                     initialRenderIndex={this.props.initialRenderIndex}
                     onVisibleIndicesChanged={this.onVisibleIndicesChanged}
@@ -197,13 +175,3 @@ export default class Scroller extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    cellContainer: {
-        flex: 1,
-        justifyContent: "space-around",
-        alignItems: "center",
-        backgroundColor: "#00a1f1",
-        borderColor: 'black',
-        borderWidth: 1
-    }
-})

@@ -8,6 +8,7 @@ export default function CalendarHeader() {
     return (
         <View style={styles.container}>
             <DefaultText style={styles.selectedDay}>1 de Janeiro</DefaultText>
+            <WeekCalendar style={styles.calendar} />
         </View>
     );
 }
@@ -23,10 +24,7 @@ const styles = StyleSheet.create({
         padding: 16
     },
     calendar: {
-        marginLeft: 16,
-        marginRight: 16,
         marginBottom: 20,
-        backgroundColor: 'blue',
-        height: 38
+        height: 60
     }
 });

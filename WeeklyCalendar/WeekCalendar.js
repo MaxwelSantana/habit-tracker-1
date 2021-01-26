@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { View, PixelRatio, Text, StyleSheet } from "react-native";
 import Scroller from './Scroller';
 import moment from "moment";
+import WeekDay from "./WeekDay";
 
 export default class WeekCalendar extends Component {
     static propTypes = {
@@ -13,7 +14,10 @@ export default class WeekCalendar extends Component {
         firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
         maxDayComponentSize: PropTypes.number,
         minDayComponentSize: PropTypes.number,
-        localeName: PropTypes.oneOf(moment.locales())
+        localeName: PropTypes.oneOf(moment.locales()),
+        style: PropTypes.object,
+
+        onDateSelected: PropTypes.func,
     }
 
     static defaultProps = {
@@ -22,6 +26,8 @@ export default class WeekCalendar extends Component {
         numDaysInWeek: 7,
         maxDayComponentSize: 80,
         minDayComponentSize: 10,
+        style: { flex: 1 },
+        selectedDate: moment(),
     }
 
     constructor(props) {
@@ -161,12 +167,29 @@ export default class WeekCalendar extends Component {
         this.setState({ dateList, initialScrollerIndex });
     }
 
+    //Handling press on date/selecting date
+    onDateSelected = selectedDate => {
+        this.setState({ selectedDate });
+        const _selectedDate = selectedDate && selectedDate.clone();
+        this.props.onDateSelected && this.props.onDateSelected(_selectedDate);
+    }
+
+    renderDay = (props) => {
+        return (
+            <WeekDay {...props} />
+        );
+    }
+
+    createDayProps = selectedDate => {
+        return {
+          selectedDate,
+          onDateSelected: this.onDateSelected,
+        }
+    }
+
     render() {
         return (
-            <View style={{
-                height: 60,
-                marginTop: 200,
-            }}>
+            <View style={this.props.style}>
                 <View
                     style={[{
                         flex: 1,
@@ -183,6 +206,8 @@ export default class WeekCalendar extends Component {
                                 pagingEnabled={true}
                                 firstDayOfWeek={this.props.firstDayOfWeek}
                                 numVisibleItems={this.props.numDaysInWeek}
+                                renderDay={this.renderDay}
+                                renderDayParams={{...this.createDayProps(this.state.selectedDate)}}
                             /> : <Text>teste menor 0</Text>
                     }
                 </View>
