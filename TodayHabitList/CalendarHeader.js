@@ -8,7 +8,10 @@ export default function CalendarHeader() {
     return (
         <View style={styles.container}>
             <DefaultText style={styles.selectedDay}>1 de Janeiro</DefaultText>
-            <WeekCalendar style={styles.calendar} />
+            <WeekCalendar
+                style={styles.calendar}
+                onWeekChanged={(weekStartDate, weekEndDate) => console.log({ weekStartDate, weekEndDate })}
+            />
         </View>
     );
 }

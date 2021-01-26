@@ -15,7 +15,7 @@ export default class WeekDay extends Component {
     constructor(props) {
         super(props);
         this._containerId = containerCount++;
-        
+
         this.state = {
             selected: this.isDateSelected(props.date, props.selectedDate),
         }
@@ -26,7 +26,7 @@ export default class WeekDay extends Component {
         let updateState = false;
         let hasDateChanged = prevProps.date !== this.props.date;
 
-        if (this.props.selectedDate !== prevProps.selectedDate) {
+        if ((this.props.selectedDate !== prevProps.selectedDate) || hasDateChanged) {
             updateState = true;
             newState = {
                 selected: this.isDateSelected(this.props.date, this.props.selectedDate),

@@ -18,6 +18,7 @@ export default class WeekCalendar extends Component {
         style: PropTypes.object,
 
         onDateSelected: PropTypes.func,
+        onWeekChanged: PropTypes.func,
     }
 
     static defaultProps = {
@@ -174,6 +175,23 @@ export default class WeekCalendar extends Component {
         this.props.onDateSelected && this.props.onDateSelected(_selectedDate);
     }
 
+    onWeekChanged = (weekStartDate, weekEndDate) => {
+        const { selectedDate } = this.state;
+
+        if (selectedDate && !selectedDate.isBetween(weekStartDate, weekEndDate)) {
+            const dayOfWeek = selectedDate.day();
+            const selectedDayOnWeek = weekStartDate && weekStartDate.clone();
+
+            if (selectedDayOnWeek) {
+                selectedDayOnWeek.day(dayOfWeek);
+                this.onDateSelected(selectedDayOnWeek);
+            }
+        }
+        const _weekStartDate = weekStartDate && weekStartDate.clone();
+        const _weekEndDate = weekEndDate && weekEndDate.clone();
+        this.props.onWeekChanged && this.props.onWeekChanged(_weekStartDate, _weekEndDate);
+    }
+
     renderDay = (props) => {
         return (
             <WeekDay {...props} />
@@ -182,8 +200,8 @@ export default class WeekCalendar extends Component {
 
     createDayProps = selectedDate => {
         return {
-          selectedDate,
-          onDateSelected: this.onDateSelected,
+            selectedDate,
+            onDateSelected: this.onDateSelected,
         }
     }
 
@@ -207,7 +225,8 @@ export default class WeekCalendar extends Component {
                                 firstDayOfWeek={this.props.firstDayOfWeek}
                                 numVisibleItems={this.props.numDaysInWeek}
                                 renderDay={this.renderDay}
-                                renderDayParams={{...this.createDayProps(this.state.selectedDate)}}
+                                renderDayParams={{ ...this.createDayProps(this.state.selectedDate) }}
+                                onWeekChanged={this.onWeekChanged}
                             /> : <Text>teste menor 0</Text>
                     }
                 </View>

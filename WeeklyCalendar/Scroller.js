@@ -13,6 +13,7 @@ export default class Scroller extends Component {
         pagingEnabled: PropTypes.bool,
         renderDay: PropTypes.func,
         renderDayParams: PropTypes.object.isRequired,
+        onWeekChanged: PropTypes.func,
     }
 
     static defaultProps = {
@@ -77,7 +78,7 @@ export default class Scroller extends Component {
             ...this.updateContainer(numVisibleItems, size),
             ...this.updateDaysData(data),
             ...this.updateScrollOffsetsStops(data, numVisibleItems, size),
-            scroll: { offsetX: 0, offsetY: 0 },
+            offsetX: 0,
         };
     }
 
@@ -110,12 +111,39 @@ export default class Scroller extends Component {
     }
 
     onVisibleIndicesChanged = (all, now, notNow) => {
-        const { data, scroll } = this.state;
+        const {
+            data,
+            visibleStartDate: _visStartDate,
+            visibleEndDate: _visEndDate,
+        } = this.state;
+
+        const {
+            numVisibleItems,
+            onWeekChanged
+        } = this.props;
 
         const visibleStartIndex = all[0];
-        const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : undefined;
+        const visibleStartDate = data[visibleStartIndex] ? data[visibleStartIndex].date : moment();
+        const visibleEndIndex = Math.min(visibleStartIndex + numVisibleItems - 1, data.length - 1);
+        const visibleEndDate = data[visibleEndIndex] ? data[visibleEndIndex].date : moment();
 
-        this.setState({ visibleStartIndex });
+
+        if (!_visStartDate || !_visEndDate ||
+            !visibleStartDate.isSame(_visStartDate, "week") ||
+            !visibleEndDate.isSame(_visEndDate, "week") ||
+            !visibleStartDate.isSame(_visStartDate, "month") ||
+            !visibleEndDate.isSame(_visEndDate, "month")) {
+
+            const visStart = visibleStartDate && visibleStartDate.clone();
+            const visEnd = visibleEndDate && visibleEndDate.clone();
+            onWeekChanged && onWeekChanged(visStart, visEnd);
+        }
+
+        this.setState({
+            visibleStartDate,
+            visibleEndDate,
+            visibleStartIndex,
+        });
     }
 
     rowRenderer = (type, data, index, extState) => {
@@ -123,7 +151,8 @@ export default class Scroller extends Component {
     }
 
     onScroll = (rawEvent, offsetX, offsetY) => {
-        this.setState({ scroll: { offsetX, offsetY } });
+        const direction = offsetX > this.state.offsetX ? 'RIGHT' : 'LEFT';
+        this.setState({ offsetX });
     }
 
     applyWindowCorrection = (offsetX, offsetY, windowCorrection) => {
