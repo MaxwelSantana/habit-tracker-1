@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, PixelRatio, Text, StyleSheet } from "react-native";
 import Scroller from './Scroller';
-import CalendarStripExample from './CalendarStripExample';
 import moment from "moment";
 
 export default class WeekCalendar extends Component {
@@ -36,10 +35,6 @@ export default class WeekCalendar extends Component {
         let dateTest = moment();
         dateTest = dateTest.locale('en', weekFirstDay);
         const startingDate = this.getInitialStartingDate();
-        console.log({
-            startingDate: startingDate.startOf("week").format('ddd'),
-            dateTest: dateTest.startOf("week").format('ddd'),
-        });
         const selectedDate = this.setLocale(this.props.selectedDate);
 
         this.state = {

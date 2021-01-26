@@ -5,18 +5,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { IconButton, Colors } from 'react-native-paper';
 
-import AppList from './AppList';
-import AppForm from './AppForm';
-import TodayHabitList from './TodayHabitList';
-import WeekCalendar from './WeeklyCalendar/WeekCalendar';
-
-import homeIcon from './assets/home.png';
-import barchartIcon from './assets/bar-chart.png';
-import starIcon from './assets/iconfinder_star_326703.png';
-import settingsIcon from './assets/black-settings-button.png';
+import AppList from '../Temporary/AppList';
+import AppForm from '../Temporary/AppForm';
+import TodayHabitList from '../TodayHabitList/TodayHabitList';
+import WeekCalendar from '../WeeklyCalendar/WeekCalendar';
 
 import { Entypo } from '@expo/vector-icons';
-import { Foundation } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const { Navigator, Screen } = createBottomTabNavigator();
