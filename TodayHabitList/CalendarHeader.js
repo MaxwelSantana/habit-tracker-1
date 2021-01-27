@@ -41,12 +41,12 @@ export default class CalendarHeader extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.dayContainer}>
-                    <DefaultText style={[styles.selectedDay]}>{this.state.selectedDateFormatted}</DefaultText>
+                    <DefaultText style={[styles.selectedDay]}>{this.state.selectedDateFormatted.toLocaleUpperCase()}</DefaultText>
                     <View style={styles.actionButton}>
                         {
                             !isToday && 
                             <TouchableOpacity disabled={isToday} onPress={this.goToday}>
-                                <DefaultText style={styles.today}>Hoje</DefaultText>
+                                <DefaultText style={styles.today}>HOJE</DefaultText>
                             </TouchableOpacity>
                         }
                     </View>
@@ -54,9 +54,10 @@ export default class CalendarHeader extends Component {
                 <WeekCalendar
                     ref={weekCalendar => this.weekCalendar = weekCalendar}
                     style={styles.calendar}
-                    localeName={'en'}
+                    localeName={'pt-br'}
                     selectedDate={this.state.selectedDate}
                     onDateSelected={this.onDateSelected}
+                    firstDayOfWeek={0}
                 />
             </View >
         );

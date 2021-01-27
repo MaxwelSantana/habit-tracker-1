@@ -2,8 +2,12 @@ import moment from "moment";
 import 'moment/locale/en-ie';
 import 'moment/locale/pt-br';
 
-moment.locale('en-ie');
+moment.updateLocale('pt-br', {
+    longDateFormat: {
+        LL: 'D [de] MMMM',
+    },    
+});
 
-console.log('FOI')
+moment.locale('pt-br');
 
 export default moment;
