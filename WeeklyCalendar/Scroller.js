@@ -164,6 +164,10 @@ export default class Scroller extends Component {
         }
     }
 
+    scrollToIndex = (index) => {
+        this.rlv.scrollToIndex(index, true);
+    }
+
     render() {
         if (!this.state.data || this.state.numDays === 0 || !this.state.itemHeight) {
             return null;

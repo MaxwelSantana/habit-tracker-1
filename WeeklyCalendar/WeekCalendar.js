@@ -3,12 +3,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, PixelRatio, Text, StyleSheet } from "react-native";
 import Scroller from './Scroller';
-import moment from "moment";
 import WeekDay from "./WeekDay";
+
+//import moment from 'moment/min/moment-with-locales';
+import moment from "../Shared/Moment";
 
 export default class WeekCalendar extends Component {
     static propTypes = {
-        startingDate: PropTypes.any,
         selectedDate: PropTypes.any,
         numDaysInWeek: PropTypes.number,
         firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
@@ -22,7 +23,7 @@ export default class WeekCalendar extends Component {
     }
 
     static defaultProps = {
-        localeName: "en",
+        localeName: 'pt-br',
         firstDayOfWeek: 1,
         numDaysInWeek: 7,
         maxDayComponentSize: 80,
@@ -38,18 +39,18 @@ export default class WeekCalendar extends Component {
 
         this.updateLocale(localeName, firstDayOfWeek);
 
-        const weekFirstDay = { week: { dow: 1 } };
-        let dateTest = moment();
-        dateTest = dateTest.locale('en', weekFirstDay);
-        const startingDate = this.getInitialStartingDate();
         const selectedDate = this.setLocale(this.props.selectedDate);
 
+        const { today, startingDate } = this.updateStartingDate();
+        const [dateList, initialScrollerIndex, todayScrollerIndex] = [0, 0, 0];
         this.state = {
-            startingDate,
             selectedDate,
-            dateList: [],
             dayComponentWidth: 0,
-            initialScrollerIndex: 0,
+            today,
+            startingDate,
+            dateList,
+            initialScrollerIndex,
+            todayScrollerIndex,
         }
 
         this.layout = {};
@@ -59,14 +60,6 @@ export default class WeekCalendar extends Component {
         const { localeName, firstDayOfWeek } = this.props;
         if (prevProps.localeName !== localeName || prevProps.firstDayOfWeek !== firstDayOfWeek) {
             this.updateLocale(localeName, firstDayOfWeek);
-        }
-
-        if (!this.compareDates(prevProps.startingDate, this.props.startingDate)) {
-            let _startingDate = this.props.startingDate || this.state.startingDate;
-
-            startingDate = { startingDate: this.setLocale(_startingDate) };
-            selectedDate = { selectedDate: this.setLocale(this.props.selectedDate) };
-            this.createDays(startingDate.startingDate, selectedDate.selectedDate);
         }
     }
 
@@ -101,17 +94,6 @@ export default class WeekCalendar extends Component {
         return _date;
     }
 
-    getInitialStartingDate = () => {
-        if (this.props.startingDate) {
-            return this.setLocale(this.props.startingDate);
-        } else {
-            // Fallback when startingDate isn't provided. However selectedDate
-            // may also be undefined, defaulting to today's date.
-            let date = this.setLocale(moment(this.props.selectedDate));
-            return date.startOf("week");
-        }
-    }
-
     onLayout = event => {
         if (event.nativeEvent.layout.width === this.layout.width) {
             return;
@@ -142,30 +124,41 @@ export default class WeekCalendar extends Component {
 
         this.setState({
             dayComponentWidth,
+            ...this.createDays(this.state.today, this.state.startingDate),
         });
-        this.createDays(this.state.startingDate);
     }
 
-    createDays = (startingDate, selectedDate = this.state.selectedDate) => {
-        let startLeftDate = startingDate;
+    updateStartingDate = () => {
+        const today = moment();
+        const startingDate = this.setLocale(today.clone());
+        startingDate.startOf("week");
+        return { today, startingDate };
+    }
+
+    createDays = (today, startingDate) => {
         let days = [];
         let dateList = [];
         let initialScrollerIndex;
+        let todayScrollerIndex;
         const weeks = this.numWeeksScroll;
         const numDays = weeks * 7;
 
-        startLeftDate = startingDate.clone().subtract(weeks / 2, "weeks");
+        const startLeftOffsetDate = startingDate.clone().subtract(weeks / 2, "weeks");
 
         for (let i = 0; i < numDays; i++) {
-            let date = this.setLocale(startLeftDate.clone().add(i, "days"));
+            let date = this.setLocale(startLeftOffsetDate.clone().add(i, "days"));
 
             if (date.isSame(startingDate, "day")) {
                 initialScrollerIndex = i;
             }
+
+            if (date.isSame(today, "day")) {
+                todayScrollerIndex = i;
+            }
             dateList.push({ date });
         }
 
-        this.setState({ dateList, initialScrollerIndex });
+        return { dateList, initialScrollerIndex, todayScrollerIndex };
     }
 
     //Handling press on date/selecting date
@@ -205,6 +198,13 @@ export default class WeekCalendar extends Component {
         }
     }
 
+    goToday = () => {
+        const { today, initialScrollerIndex } = this.state;
+
+        this.scroller.scrollToIndex(initialScrollerIndex);
+        this.onDateSelected(today);
+    }
+
     render() {
         return (
             <View style={this.props.style}>
@@ -218,6 +218,7 @@ export default class WeekCalendar extends Component {
                     {
                         this.state.dateList.length > 0 ?
                             <Scroller
+                                ref={scroller => this.scroller = scroller}
                                 data={this.state.dateList}
                                 size={this.state.dayComponentWidth}
                                 initialRenderIndex={this.state.initialScrollerIndex}
