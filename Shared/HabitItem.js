@@ -6,8 +6,6 @@ import CircularProgress from './CircularProgress';
 import DefaultText from './DefaultText';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { Icon } from 'react-native-elements'
-import { Divider } from 'react-native-elements';
 
 export default function HabitItem() {
     const size = 25;

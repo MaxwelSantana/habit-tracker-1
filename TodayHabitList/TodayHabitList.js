@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { SectionList, FlatList, StyleSheet, Text, View } from 'react-native';
-import HabitItem from './HabitItem';
-import DefaultText from './DefaultText';
+import HabitItem from '../Shared/HabitItem';
+import DefaultText from '../Shared/DefaultText';
+import CalendarHeader from "./CalendarHeader";
 
 export default class TodayHabitList extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<SectionList
+				<CalendarHeader />
+				<SectionList style={styles.habitList}
 					sections={[
 						{ title: 'Manhã (3)', data: ['Devin ', 'Dan', 'Dominic'] },
 						{ title: 'Tarde (7)', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie'] },
@@ -23,11 +25,11 @@ export default class TodayHabitList extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		paddingTop: 200,
+		backgroundColor: '#343F4D',
+	},
+	habitList: {
 		paddingLeft: 16,
 		paddingRight: 16,
-		backgroundColor: '#343F4D',
 	},
 	sectionHeader: {
 		fontSize: 12,

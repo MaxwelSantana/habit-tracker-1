@@ -2,8 +2,8 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import AppList from './AppList';
-import AppForm from './AppForm';
+import AppList from '../Temporary/AppList';
+import AppForm from '../Temporary/AppForm';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
