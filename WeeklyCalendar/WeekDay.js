@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import PropTypes from "prop-types";
+import DefaultText from '../Shared/DefaultText';
 
 let containerCount = 0;
 
@@ -10,6 +11,7 @@ export default class WeekDay extends Component {
         date: PropTypes.object.isRequired,
         selectedDate: PropTypes.any,
         onDateSelected: PropTypes.func.isRequired,
+        contentSize: PropTypes.number,
     }
 
     constructor(props) {
@@ -18,6 +20,7 @@ export default class WeekDay extends Component {
 
         this.state = {
             selected: this.isDateSelected(props.date, props.selectedDate),
+            contentSize: props.contentSize,
         }
     }
 
@@ -30,6 +33,14 @@ export default class WeekDay extends Component {
             updateState = true;
             newState = {
                 selected: this.isDateSelected(this.props.date, this.props.selectedDate),
+            }
+        }
+
+        if (this.props.size !== prevProps.size) {
+            updateState = true;
+            newState = {
+                contentSize: this.props.contentSize,
+                ...newState,
             }
         }
 
@@ -48,15 +59,39 @@ export default class WeekDay extends Component {
     }
 
     render() {
-        const { date, index, onDateSelected } = this.props;
+        const { date, index, onDateSelected, contentSize } = this.props;
         const { selected } = this.state;
+
+        const size = contentSize / 2;
+
+        const dayBox = { 
+            height: size, 
+            width: size,
+            borderColor: 'yellow',
+            borderRadius: size / 2,
+            justifyContent: 'center',
+            alignItems: 'center',
+        };
+
+        const selectedColor = {
+            color: '#E9EAFA'
+        };
+        
+        const selectedDayBorder = {
+            borderWidth: 1,
+        };
+
         return (
             <TouchableWithoutFeedback onPress={() => onDateSelected(date)}>
-                <View
-                    style={[styles.cellContainer, selected && styles.selected]} >
-                    <Text>{date.format("ddd").toUpperCase()}</Text>
-                    <Text>{date.format("DD").toUpperCase()}</Text>
-                    <Text>{index}</Text>
+                <View style={styles.cellContainer}>
+                    <DefaultText style={[styles.styleTexts, selected && selectedColor]}>
+                        {date.format("ddd").toUpperCase()}
+                    </DefaultText>
+                    <View style={[dayBox, selected && selectedDayBorder]}>
+                        <DefaultText style={[styles.styleTexts, selected && selectedColor]}>
+                            {date.format("DD").toUpperCase()}
+                        </DefaultText>
+                    </View>
                 </View>
             </TouchableWithoutFeedback>
         );
@@ -66,13 +101,11 @@ export default class WeekDay extends Component {
 const styles = StyleSheet.create({
     cellContainer: {
         flex: 1,
-        justifyContent: "space-around",
         alignItems: "center",
-        backgroundColor: "#00a1f1",
-        borderColor: 'black',
-        borderWidth: 1
+        justifyContent: 'space-between',
     },
-    selected: {
-        backgroundColor: 'yellow',
-    }
+    styleTexts: {
+        color: '#647482',
+        fontWeight: '100',
+    },
 })

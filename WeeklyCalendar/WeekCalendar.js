@@ -195,6 +195,7 @@ export default class WeekCalendar extends Component {
         return {
             selectedDate,
             onDateSelected: this.onDateSelected,
+            contentSize: this.state.dayComponentWidth,
         }
     }
 
