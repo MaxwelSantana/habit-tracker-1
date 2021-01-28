@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { Text, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
-import AppTab from './Shared/AppTab';
+import AppTab from './src/Shared/AppTab';
 
 const theme = {
   ...DefaultTheme,
@@ -14,7 +15,7 @@ const theme = {
 };
 
 export default function App() {
-  const statusBar = false;
+  const statusBar = true;
   return (
     <PaperProvider theme={theme}>
       <AppTab />

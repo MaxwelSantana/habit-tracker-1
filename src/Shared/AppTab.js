@@ -8,7 +8,7 @@ import { IconButton, Colors } from 'react-native-paper';
 import AppList from '../Temporary/AppList';
 import AppForm from '../Temporary/AppForm';
 import TodayHabitList from '../TodayHabitList/TodayHabitList';
-import WeekCalendar from '../WeeklyCalendar/WeekCalendar';
+import CreateHabit from '../CreateHabit/CreateHabit';
 
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -68,7 +68,7 @@ function AppTab({ navigation }) {
 						),
 					}}
 				/>
-				<Screen name="Add" component={AppForm}
+				<Screen name="CreateHabit" component={CreateHabit}
 					options={({ navigation, route }) => ({
 						tabBarLabel: "Adicionar",
 						tabBarIcon: ({ color }) => (
@@ -77,8 +77,7 @@ function AppTab({ navigation }) {
 								color="#E9EAFA"
 								size={40}
 								onPress={() => {
-									navigation .navigate('Home');
-									console.log('pressed');
+									navigation .navigate('CreateHabit');
 								}}
 								style={{ ...styles.buttonAbsolute, backgroundColor: "#1F8DFC" }}
 							/>
