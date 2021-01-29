@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SectionList, FlatList, StyleSheet, Text, View } from 'react-native';
+import { SectionList, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import HabitItem from '../Shared/HabitItem';
 import DefaultText from '../Shared/DefaultText';
 import CalendarHeader from "./CalendarHeader";
