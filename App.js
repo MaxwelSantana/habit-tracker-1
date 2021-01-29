@@ -3,7 +3,8 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
-import AppTab from './src/Shared/AppTab';
+//import AppTab from './src/Shared/AppTab';
+import AppTabModal from './src/Shared/AppTabModal';
 
 const theme = {
   ...DefaultTheme,
@@ -18,7 +19,7 @@ export default function App() {
   const statusBar = true;
   return (
     <PaperProvider theme={theme}>
-      <AppTab />
+      <AppTabModal />
       { statusBar && <StatusBar style="light" />}
     </PaperProvider>
   );
