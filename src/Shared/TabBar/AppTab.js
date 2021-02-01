@@ -1,21 +1,25 @@
 import * as React from 'react';
 import { View, Text, Button, TouchableOpacity } from 'react-native';
+//import { TouchableOpacity } from 'react-native-gesture-handler'
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TransitionSpecs } from '@react-navigation/stack';
 import { CardStyleInterpolators } from '@react-navigation/stack';
 
-import AppList from '../Temporary/AppList';
-import AppForm from '../Temporary/AppForm';
-import TodayHabitList from '../TodayHabitList/TodayHabitList';
-import CreateHabit from '../CreateHabit/CreateHabit';
+import AppList from '../../Temporary/AppList';
+import AppForm from '../../Temporary/AppForm';
+import TodayHabitList from '../../TodayHabitList/TodayHabitList';
+import CreateHabit from '../../CreateHabit/CreateHabit';
 
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { IconButton } from 'react-native-paper';
 
 import MyTabBar from './MyTabBar';
+
+
+import { useTheme, Portal, FAB, IconButton } from 'react-native-paper';
 
 function ModalScreen({ navigation }) {
 	return (
@@ -39,7 +43,27 @@ function ModalScreen2({ navigation }) {
 const RootStack = createStackNavigator();
 const MainStack = createBottomTabNavigator();
 
+let keyCount = 0;
+const MiddleButton2 = (props) => {
+	return (
+		<View
+			key={keyCount++}
+			style={{ flex: 1, position: 'relative', alignItems: 'center', justifyContent: 'center', backgroundColor: 'yellow' }}
+		>
+			{props.children}
+		</View>
+	);
+}
+
+const MiddleButton3 = (props) => {
+	return (
+		<MiddleButton />
+	);
+}
+
 const MiddleButton = () => {
+	const theme = useTheme();
+
 	const buttonAbsolute = {
 		backgroundColor: '#1F8DFC',
 		transform: [
@@ -48,28 +72,49 @@ const MiddleButton = () => {
 	};
 
 	return (
+		/*
 		<IconButton
 			icon="plus"
 			color="#E9EAFA"
 			size={40}
 			onPress={() => {
 				alert('teste');
-				//navigation.navigate('MyModal');
 			}}
 			style={buttonAbsolute}
+		/>*/
+		<FAB
+			visible={true}
+			icon="plus"
+			color="white"
+			style={{
+				position: 'absolute',
+				bottom: 20,
+				zIndex: 3,
+			}}
+			theme={{
+				colors: {
+					accent: theme.colors.primary,
+				},
+			}}
+			onPress={() => { }}
 		/>
 	);
 }
 
+function EmptyComponent() {
+	return null;
+}
+
 function MainStackScreen() {
+	//tabBar={props => <MyTabBar {...props} />}
 	return (
-		<MainStack.Navigator	
+		<MainStack.Navigator
 			tabBar={props => <MyTabBar {...props} />}
 			tabBarOptions={{
 				style: {
 					height: 40,
 					backgroundColor: "#1F2E46",
-					position: 'absolute'
+					justifyContent: 'space-around'
 				},
 				tabStyle: {
 					paddingTop: 5,
@@ -79,12 +124,11 @@ function MainStackScreen() {
 				inactiveTintColor: '#647482',
 				activeTintColor: '#1B8FFF',
 				allowFontScaling: true,
-			}}	
+			}}
 		>
 			<MainStack.Screen name="Home" component={TodayHabitList}
 				options={{
-					title: "Compras",
-					tabBarLabel: "Compras",
+					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<Entypo name="home" size={size} color={color} />
 					),
@@ -92,15 +136,18 @@ function MainStackScreen() {
 			/>
 			<MainStack.Screen name="Stats" component={TodayHabitList}
 				options={{
-					tabBarLabel: "Adicionar",
+					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<Entypo name="bar-graph" size={size} color={color} />
 					),
 				}}
 			/>
-			<MainStack.Screen name="CreateHabit" component={CreateHabit}
+			<MainStack.Screen name="EmptyComponent" component={EmptyComponent}
 				options={({ navigation, route }) => ({
+					tabBarButton: props => <MiddleButton3 {...props} />,
 					tabBarIcon: ({ color }) => (
+						<MiddleButton />
+						/*
 						<View
 							style={{
 								position: 'absolute',
@@ -115,8 +162,6 @@ function MainStackScreen() {
 							<Entypo name="plus" size={68} color='#E9EAFA'/>
 						</View>
 						/*
-						<MiddleButton />
-						/*
 						<TouchableOpacity style={[buttonAbsolute]}>
 								<Text>Teste</Text>
 							</TouchableOpacity>
@@ -126,7 +171,7 @@ function MainStackScreen() {
 			/>
 			<MainStack.Screen name="Plan" component={AppList}
 				options={{
-					tabBarLabel: "Adicionar",
+					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<Entypo name="star" size={size} color={color} />
 					),
@@ -134,7 +179,7 @@ function MainStackScreen() {
 			/>
 			<MainStack.Screen name="Settings" component={AppForm}
 				options={{
-					tabBarLabel: "Adicionar",
+					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<MaterialIcons name="settings" size={size} color={color} />
 					),

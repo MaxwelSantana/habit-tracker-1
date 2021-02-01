@@ -3,26 +3,24 @@ import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
-import AppTab from './src/Shared/AppTab';
+import AppTab from './src/Shared/TabBar/AppTab';
+//import BottomTabs from './src/Shared/TabBar/BottomTabs';
 
 const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'tomato',
+    primary: '#1F8DFC',
     accent: 'yellow',
   },
 };
 
 export default function App() {
-  const statusBar = true;
+  const statusBar = false;
   return (
     <PaperProvider theme={theme}>
       <AppTab />
       { statusBar && <StatusBar style="light" />}
-      <TouchableOpacity style={{ height: 60, backgroundColor: 'blue', position: 'absolute', bottom: 0, left: 50 }}>
-        <Text>Teste</Text>
-      </TouchableOpacity>
     </PaperProvider>
   );
 }
