@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { View, Text, Button, TouchableOpacity } from 'react-native';
-//import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, Text, Button, Platform } from 'react-native';
+import { Link } from '@react-navigation/native';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+//import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -57,7 +59,17 @@ const MiddleButton2 = (props) => {
 
 const MiddleButton3 = (props) => {
 	return (
-		<MiddleButton />
+		<View style={{ flex: 1 }}>
+			<View style={{ position: 'absolute', zIndex: 3, bottom: 30 }}>
+				<TouchableOpacity
+					onPress={() => alert('teste')}
+				>
+					<View style={{ width: 60, height: 60, backgroundColor: 'blue', }}>
+						<Text>teste</Text>
+					</View>
+				</TouchableOpacity>
+			</View>
+		</View>
 	);
 }
 
@@ -89,20 +101,111 @@ const MiddleButton = () => {
 			style={{
 				position: 'absolute',
 				bottom: 20,
-				zIndex: 3,
+				zIndex: 10,
+				elevation: 10
 			}}
 			theme={{
 				colors: {
 					accent: theme.colors.primary,
 				},
 			}}
-			onPress={() => { }}
+			onPress={() => { alert('pressed') }}
 		/>
 	);
 }
 
-function EmptyComponent() {
+const EmptyComponent = () => {
 	return null;
+}
+
+const TabBarButton = (props) => {
+	const { style, to, children, ...rest } = props;
+	console.log({ rest })
+	return <MiddleButton />
+}
+
+const TabBarButton2 = ({
+	children,
+	style,
+	onPress,
+	to,
+	accessibilityRole,
+	...rest
+}) => {
+	if (Platform.OS === 'web' && to) {
+		// React Native Web doesn't forward `onClick` if we use `TouchableWithoutFeedback`.
+		// We need to use `onClick` to be able to prevent default browser handling of links.
+		return (
+			<Link
+				{...rest}
+				to={to}
+				style={[{ display: 'flex', }, style]}
+				onPress={(e) => {
+					if (
+						!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) && // ignore clicks with modifier keys
+						(e.button == null || e.button === 0) // ignore everything but left clicks
+					) {
+						e.preventDefault();
+						onPress?.(e);
+					}
+				}}
+			>
+				{children}
+			</Link>
+		);
+	} else {
+		return (
+			<TouchableWithoutFeedback
+				{...rest}
+				accessibilityRole={accessibilityRole}
+				onPress={onPress}
+			>
+				<View style={style}>{children}</View>
+			</TouchableWithoutFeedback>
+		);
+	}
+}
+
+const TabBarButton3 = ({
+	children,
+	style,
+	onPress,
+	to,
+	accessibilityRole,
+	...rest
+}) => {
+	if (Platform.OS === 'web' && to) {
+		// React Native Web doesn't forward `onClick` if we use `TouchableWithoutFeedback`.
+		// We need to use `onClick` to be able to prevent default browser handling of links.
+		return (
+			<Link
+				{...rest}
+				to={to}
+				style={[{ display: 'flex', }, style]}
+				onPress={(e) => {
+					if (
+						!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) && // ignore clicks with modifier keys
+						(e.button == null || e.button === 0) // ignore everything but left clicks
+					) {
+						e.preventDefault();
+						onPress?.(e);
+					}
+				}}
+			>
+				{children}
+			</Link>
+		);
+	} else {
+		return (
+			<TouchableWithoutFeedback
+				{...rest}
+				accessibilityRole={accessibilityRole}
+				onPress={() => alert('teste')}
+			>
+				<View style={style}><MiddleButton /></View>
+			</TouchableWithoutFeedback>
+		);
+	}
 }
 
 function MainStackScreen() {
@@ -114,21 +217,15 @@ function MainStackScreen() {
 				style: {
 					height: 40,
 					backgroundColor: "#1F2E46",
-					justifyContent: 'space-around'
-				},
-				tabStyle: {
-					paddingTop: 5,
 				},
 				showIcon: true,
 				showLabel: false,
 				inactiveTintColor: '#647482',
 				activeTintColor: '#1B8FFF',
-				allowFontScaling: true,
 			}}
 		>
 			<MainStack.Screen name="Home" component={TodayHabitList}
 				options={{
-					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<Entypo name="home" size={size} color={color} />
 					),
@@ -136,7 +233,6 @@ function MainStackScreen() {
 			/>
 			<MainStack.Screen name="Stats" component={TodayHabitList}
 				options={{
-					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<Entypo name="bar-graph" size={size} color={color} />
 					),
@@ -144,34 +240,14 @@ function MainStackScreen() {
 			/>
 			<MainStack.Screen name="EmptyComponent" component={EmptyComponent}
 				options={({ navigation, route }) => ({
-					tabBarButton: props => <MiddleButton3 {...props} />,
+					tabBarButton: props => <TabBarButton3 {...props} />,
 					tabBarIcon: ({ color }) => (
 						<MiddleButton />
-						/*
-						<View
-							style={{
-								position: 'absolute',
-								bottom: 0,
-								height: 68,
-								width: 68,
-								borderRadius: 68,
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-						>
-							<Entypo name="plus" size={68} color='#E9EAFA'/>
-						</View>
-						/*
-						<TouchableOpacity style={[buttonAbsolute]}>
-								<Text>Teste</Text>
-							</TouchableOpacity>
-						*/
 					)
 				})}
 			/>
 			<MainStack.Screen name="Plan" component={AppList}
 				options={{
-					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<Entypo name="star" size={size} color={color} />
 					),
@@ -179,7 +255,6 @@ function MainStackScreen() {
 			/>
 			<MainStack.Screen name="Settings" component={AppForm}
 				options={{
-					tabBarButton: props => <MiddleButton2 {...props} />,
 					tabBarIcon: ({ color, size }) => (
 						<MaterialIcons name="settings" size={size} color={color} />
 					),
