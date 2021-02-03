@@ -16,9 +16,11 @@ export default function MyTabBar(props) {
     const { state, descriptors, navigation, activeTintColor, inactiveTintColor, style, tabStyle, } = props;
     const { routes, index: activeRouteIndex } = state;
 
+    console.log({ style })
+    //height direto funciona <View style={[{height: 40}]}>
     return (
-        <View style={{ height: 40 }} >
-            <View style={{ flex: 1, flexDirection: 'row', }}>
+        <View style={[{height: 40}, style]}>
+            <View style={{ flexDirection: 'row', flex: 1 }}>
                 {routes.map((route, routeIndex) => {
                     const { options, render } = descriptors[route.key];
                     const { tabBarIcon, tabBarButton } = options;
@@ -111,14 +113,14 @@ export default function MyTabBar(props) {
                                 style={{ flex: 1 }}
                             >
                                 {renderItem()}
-    
+     
                             </TouchableWithoutFeedback>
                         </View>
                     );
                     */
 
                     /*
-    
+     
                      return (
                          <TouchableWithoutFeedback
                     key={routeIndex}
@@ -138,48 +140,62 @@ export default function MyTabBar(props) {
                      */
 
                     /*
-                                    return (
-                                        <View
-                                            key={routeIndex}
-                                            style={{ flex: 1, position: 'relative', alignItems: 'center', justifyContent: 'center' }}
-                                        >
-                                            <TouchableWithoutFeedback
-                                                accessibilityRole="button"
-                                                accessibilityState={isRouteActive ? { selected: true } : {}}
-                                                accessibilityLabel={options.tabBarAccessibilityLabel}
-                                                testID={options.tabBarTestID}
-                                                onPress={onPress}
-                                                onLongPress={onLongPress}
-                                                style={{ flex: 1 }}
+                    WORKING FUUUUUUULL
+                    return (
+                        <View
+                            key={routeIndex}
+                            style={{ flex: 1, position: 'relative', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                            <TouchableWithoutFeedback
+                                accessibilityRole="button"
+                                accessibilityState={isRouteActive ? { selected: true } : {}}
+                                accessibilityLabel={options.tabBarAccessibilityLabel}
+                                testID={options.tabBarTestID}
+                                onPress={onPress}
+                                onLongPress={onLongPress}
+                                style={{ flex: 1 }}
+                            >
+                                {tabBarIcon({ route, focused: isRouteActive, color: tintColor, size: 25 })}
+                            </TouchableWithoutFeedback>
+    
+                        </View>
+                    );*/
+                    /*
+                                        return (
+                                            <NavigationContext.Provider
+                                                key={route.key}
+                                                value={descriptors[route.key].navigation}
                                             >
-                                                {tabBarIcon({ route, focused: isRouteActive, color: tintColor, size: 25 })}
-                                            </TouchableWithoutFeedback>
-                    
-                                        </View>
-                                    );*/
-
+                                                <NavigationRouteContext.Provider value={route}>
+                                                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <TouchableWithoutFeedback
+                                                            accessibilityRole="button"
+                                                            accessibilityState={isRouteActive ? { selected: true } : {}}
+                                                            accessibilityLabel={options.tabBarAccessibilityLabel}
+                                                            testID={options.tabBarTestID}
+                                                            onPress={onPress}
+                                                            onLongPress={onLongPress}
+                                                        >
+                                                            {tabBarIcon({ route, focused: isRouteActive, color: tintColor, size: 25 })}
+                                                        </TouchableWithoutFeedback>
+                                                    </View>
+                                                </NavigationRouteContext.Provider>
+                                            </NavigationContext.Provider>
+                                        );*/
                     return (
                         <NavigationContext.Provider
                             key={route.key}
                             value={descriptors[route.key].navigation}
                         >
                             <NavigationRouteContext.Provider value={route}>
-                                <View
-                                    style={{ flex: 1, position: 'relative', alignItems: 'center', justifyContent: 'center' }}
-                                >
-                                    <TouchableWithoutFeedback
-                                        accessibilityRole="button"
-                                        accessibilityState={isRouteActive ? { selected: true } : {}}
-                                        accessibilityLabel={options.tabBarAccessibilityLabel}
-                                        testID={options.tabBarTestID}
-                                        onPress={onPress}
-                                        onLongPress={onLongPress}
-                                        style={{ flex: 1 }}
-                                    >
-                                        {tabBarIcon({ route, focused: isRouteActive, color: tintColor, size: 25 })}
-                                    </TouchableWithoutFeedback>
-
-                                </View>
+                                {tabBarButton({
+                                    accessibilityRole: "button",
+                                    accessibilityState: isRouteActive ? { selected: true } : {},
+                                    accessibilityLabel: options.tabBarAccessibilityLabel,
+                                    testID: options.tabBarTestID,
+                                    onPress: onPress,
+                                    onLongPress: onLongPress,
+                                })}
                             </NavigationRouteContext.Provider>
                         </NavigationContext.Provider>
                     );
