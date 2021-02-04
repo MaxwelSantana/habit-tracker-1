@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import CircularProgress from '../Shared/CircularProgress';
-import TabBg from '../Shared/TabBar/TabBg'
 
 export default function AppList() {
 	return (
@@ -31,10 +30,6 @@ export default function AppList() {
 				size={50}
 				onPress={() => console.log('Pressed')}
 				style={{ backgroundColor: "#1F8DFC" }}
-			/>
-
-			<TabBg
-				color='#E9EAFA'
 			/>
 
 
