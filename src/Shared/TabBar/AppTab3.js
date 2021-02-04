@@ -21,6 +21,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import MyTabBar from './MyTabBar';
 import MyTabBar2 from './MyTabBar2';
 import TabBarAdvancedButton from './TabBarAdvancedButton';
+import TabBarAdvancedButton2 from './TabBarAdvancedButton2';
+import PayScreenModal from './PayScreenModal';
 
 import { useTheme, Portal, FAB, IconButton } from 'react-native-paper';
 
@@ -89,7 +91,8 @@ function MainStackScreen() {
 		<MainStack.Navigator
 			tabBar={(props) => (
 				<View style={styles.navigatorContainer}>
-					<BottomTabBar
+					<View style={{ height: 60 }}></View>
+					<MyTabBar2
 						{...props}
 					/>
 					{IS_IPHONE_X && (
@@ -104,7 +107,8 @@ function MainStackScreen() {
 				style: styles.navigator,
 				tabStyle: {
 					backgroundColor: barColor
-				}
+				},
+				allowFontScaling: true,
 			}}
 		>
 			<MainStack.Screen name="Home" component={TodayHabitList}
@@ -123,7 +127,8 @@ function MainStackScreen() {
 			/>
 			<MainStack.Screen name="EmptyComponent" component={EmptyComponent}
 				options={({ navigation, route }) => ({
-					tabBarButton: props => <TabBarAdvancedButton bgColor={barColor} {...props} />,
+					//tabBarButton: () => (<PayScreenModal />),
+					tabBarButton: props => <TabBarAdvancedButton2 bgColor={barColor} {...props} />,
 				})}
 			/>
 			<MainStack.Screen name="Plan" component={AppList}
@@ -185,7 +190,8 @@ const styles = StyleSheet.create({
 	navigator: {
 		borderTopWidth: 0,
 		backgroundColor: 'transparent',
-		elevation: 30
+		elevation: 30,
+		maxHeight: 150,
 	},
 	xFillLine: {
 		position: 'absolute',
