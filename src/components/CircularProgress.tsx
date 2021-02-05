@@ -11,14 +11,14 @@ const cx = "50%";
 const cy = "50%";
 
 type Props = {
-    strokeWidth: number,
     done: number,
     total: number,
-    size: number,
+    strokeWidth?: number,
+    size?: number,
     duration?: number,
-    color: string,
-    opacity: number,
-    children: any,
+    color?: string,
+    opacity?: number,
+    children?: any,
 };
 
 export const CircularProgress: React.FC<Props> = ({

@@ -9,28 +9,19 @@ export default function AppList() {
 	return (
 		<View style={styles.container}>
 
-			<CircularProgress percentage={50} color='black' />
-			<CircularProgress percentage={75} color='blue' />
-			<CircularProgress percentage={90} color='black' />
-			<CircularProgress percentage={65} color='blue' />
+			<CircularProgress done={5} total={10} color='black' />
+			<CircularProgress done={7} total={10} color='blue' />
+			<CircularProgress done={9} total={10} color='black' />
+			<CircularProgress done={6} total={10} color='blue' />
 
 			<Text>List!</Text>
 			<StatusBar style="light" />
 
 			<LinearGradient
 				// Button Linear Gradient
-				colors={['#4c669f', '#3b5998', '#192f6a']}
-				style={styles.button}>
-				<Text style={styles.text}>Sign in with Facebook</Text>
+				colors={['#4c669f', '#3b5998', '#192f6a']} >
+				<Text>Sign in with Facebook</Text>
 			</LinearGradient>
-
-			<IconButton
-				icon="plus"
-				color="#E9EAFA"
-				size={50}
-				onPress={() => console.log('Pressed')}
-				style={{ backgroundColor: "#1F8DFC" }}
-			/>
 
 
 		</View>
