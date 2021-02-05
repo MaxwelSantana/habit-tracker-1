@@ -6,7 +6,7 @@ import Scroller from './Scroller';
 import WeekDay from "./WeekDay";
 
 //import moment from 'moment/min/moment-with-locales';
-import moment from "../Shared/Moment";
+import moment from "../Moment";
 
 export default class WeekCalendar extends Component {
     static propTypes = {

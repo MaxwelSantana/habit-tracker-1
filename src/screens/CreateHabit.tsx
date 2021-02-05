@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import NewHabitHeader from './NewHabitHeader';
+import NewHabitHeader from '../components/NewHabitHeader';
 
 export default class CreateHabit extends Component {
     render() {

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import DefaultText from '../Shared/DefaultText';
-import WeekCalendar from "../WeeklyCalendar/WeekCalendar";
+import DefaultText from './DefaultText';
+import WeekCalendar from "./WeeklyCalendar/WeekCalendar";
 //import moment from 'moment/min/moment-with-locales';
-import moment from "../Shared/Moment";
+import moment from "./Moment";
 
 export default class CalendarHeader extends Component {
     constructor() {

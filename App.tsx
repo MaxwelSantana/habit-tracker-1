@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
-import AppTab from './src/Shared/TabBar/AppTab';
+import AppTab from './src/navigation/AppTab';
 
 const theme = {
   ...DefaultTheme,

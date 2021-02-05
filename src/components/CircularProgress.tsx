@@ -4,13 +4,24 @@ import { View, Easing, StyleSheet, Animated } from "react-native";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const strokeLinejoin = "butt" | "round"
-const strokeLinecap = "butt" | "round"
-const fill = "none"
+const strokeLinejoin: any = "butt" || "round";
+const strokeLinecap: any = "butt" || "round";
+const fill = "none";
 const cx = "50%";
 const cy = "50%";
 
-export default function CircularProgress({
+type Props = {
+    strokeWidth: number,
+    done: number,
+    total: number,
+    size: number,
+    duration?: number,
+    color: string,
+    opacity: number,
+    children: any,
+};
+
+export const CircularProgress: React.FC<Props> = ({
     strokeWidth = 3,
     done = 90,
     total = 100,
@@ -19,7 +30,7 @@ export default function CircularProgress({
     color = "#1F8DFC",
     opacity = 1,
     children
-}) {
+}) => {
     const radius = (size + strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const halfCircle = radius + strokeWidth;

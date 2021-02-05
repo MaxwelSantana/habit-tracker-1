@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
-import CircularProgress from '../Shared/CircularProgress';
+import { CircularProgress } from '../components/CircularProgress';
 
 export default function AppList() {
 	return (

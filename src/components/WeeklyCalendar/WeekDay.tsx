@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import PropTypes from "prop-types";
-import DefaultText from '../Shared/DefaultText';
+import DefaultText from '../DefaultText';
 
 let containerCount = 0;
 

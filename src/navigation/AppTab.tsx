@@ -6,14 +6,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CardStyleInterpolators } from '@react-navigation/stack';
 
-import AppList from '../../Temporary/AppList';
-import AppForm from '../../Temporary/AppForm';
-import TodayHabitList from '../../TodayHabitList/TodayHabitList';
+import AppList from '../screens/AppList';
+import AppForm from '../screens/AppForm';
+import TodayHabitList from '../screens/TodayHabitList';
 
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import TabBarAdvancedButton from './TabBarAdvancedButton';
+import TabBarAdvancedButton from '../components/TabBarAdvancedButton';
 
 import { useTheme } from 'react-native-paper';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import CircularProgress from './CircularProgress';
+import { CircularProgress } from './CircularProgress';
 import DefaultText from './DefaultText';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -22,7 +22,6 @@ export default function HabitItem() {
         <TouchableOpacity style={styles.item}>
             <View style={styles.content}>
                 <CircularProgress
-                    style={styles.circularProgress}
                     done={done}
                     total={total}
                     size={33}
@@ -34,7 +33,7 @@ export default function HabitItem() {
                     <MaterialCommunityIcons name="water" {...{ size, color }} />
                 </CircularProgress>
                 <View style={styles.titleBlock}>
-                    <DefaultText style={[styles.title, { opacity }, completed() && {textDecorationLine: 'line-through', textDecorationStyle: 'solid'}]}>Beber água</DefaultText>
+                    <DefaultText style={[styles.title, { opacity }, completed() && { textDecorationLine: 'line-through', textDecorationStyle: 'solid' }]}>Beber água</DefaultText>
                     <DefaultText style={[styles.motivationPhrase, { opacity }]}>Go for it</DefaultText>
                 </View>
                 <View style={styles.goalsBlock}>
