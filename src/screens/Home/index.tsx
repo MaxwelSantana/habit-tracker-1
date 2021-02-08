@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { SectionList, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import HabitItem from '../components/HabitItem';
-import DefaultText from '../components/DefaultText';
-import CalendarHeader from "../components/CalendarHeader";
+import HabitItem from '../../components/HabitItem';
+import DefaultText from '../../components/DefaultText';
+import CalendarHeader from '../../components/CalendarHeader';
 
 export default class TodayHabitList extends Component {
 	render() {
@@ -11,12 +11,12 @@ export default class TodayHabitList extends Component {
 				<CalendarHeader />
 				<SectionList style={styles.habitList}
 					sections={[
-						{ title: 'Manhã (3)', data: ['Devin ', 'Dan', 'Dominic'] },
-						{ title: 'Tarde (7)', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie'] },
+						{ title: 'Manhã (3)', data: ['Devin ', 'Dan', 'Dominic'], },
+						{ title: 'Tarde (7)', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie'], }
 					]}
-					renderItem={({ item }) => <HabitItem></HabitItem>}
-					renderSectionHeader={({ section }) => <DefaultText style={styles.sectionHeader}>{section.title}</DefaultText>}
-					keyExtractor={(item, index) => index}
+					renderItem={({ item, }) => <HabitItem></HabitItem>}
+					renderSectionHeader={({ section, }) => <DefaultText style={styles.sectionHeader}>{section.title}</DefaultText>}
+					keyExtractor={(item, index) => String(index)}
 				/>
 			</View>
 		);
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		color: 'rgba(233, 234, 250, 0.8)',
 		marginTop: 10,
-		marginBottom: 20
+		marginBottom: 20,
 	},
-})
+});

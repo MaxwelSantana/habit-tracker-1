@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import React, { Component } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import DefaultText from './DefaultText';
-import WeekCalendar from "./WeeklyCalendar/WeekCalendar";
+import WeekCalendar from './WeeklyCalendar/WeekCalendar';
 //import moment from 'moment/min/moment-with-locales';
-import moment from "./Moment";
+import moment from './Moment';
 
 export default class CalendarHeader extends Component {
     constructor() {
@@ -16,11 +16,11 @@ export default class CalendarHeader extends Component {
             today,
             selectedDate,
             selectedDateFormatted: selectedDate.format('LL'),
-        }
+        };
     }
 
     onDateSelected = (selectedDate) => {
-        this.setState({ selectedDate, selectedDateFormatted: selectedDate.format('LL') });
+        this.setState({ selectedDate, selectedDateFormatted: selectedDate.format('LL'), });
     }
 
     goToday = () => {
@@ -28,7 +28,7 @@ export default class CalendarHeader extends Component {
     }
 
     isToday = () => {
-        const { today, selectedDate } = this.state;
+        const { today, selectedDate, } = this.state;
 
         if (today && selectedDate)
             return today.isSame(selectedDate, 'day');
@@ -67,12 +67,12 @@ export default class CalendarHeader extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#1F2E46',
-        paddingTop: 10
+        paddingTop: 10,
     },
     dayContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        position: 'relative'
+        position: 'relative',
     },
     selectedDay: {
         fontSize: 16,
@@ -90,6 +90,6 @@ const styles = StyleSheet.create({
     },
     calendar: {
         marginBottom: 20,
-        height: 60
-    }
+        height: 60,
+    },
 });

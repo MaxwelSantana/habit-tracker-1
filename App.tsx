@@ -2,8 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
 
-import AppTab from './src/navigation/AppTab';
+import MainStack from './src/stacks/MainStack';
 
 const theme = {
   ...DefaultTheme,
@@ -18,7 +19,9 @@ export default function App() {
   const statusBar = false;
   return (
     <PaperProvider theme={theme}>
-      <AppTab />
+      <NavigationContainer>
+        <MainStack />
+      </NavigationContainer>
       { statusBar && <StatusBar style="light" />}
     </PaperProvider>
   );

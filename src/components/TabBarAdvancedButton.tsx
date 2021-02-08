@@ -3,23 +3,28 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Entypo as Icon } from '@expo/vector-icons';
 import { useTheme } from 'react-native-paper';
 
+type TabBarAdvancedButtonProps = {
+    bgColor: string,
+    onPress?: (event: any) => void,
+}
+
 //https://itnext.io/reactnative-curved-tabbar-dc62e681c24d
 export default function TabBarAdvancedButton({
     bgColor,
     onPress,
     ...props
-}) {
+}: TabBarAdvancedButtonProps) {
     const theme = useTheme();
 
-    const border = { borderWidth: 5, borderColor: bgColor }
+    const border = { borderWidth: 5, borderColor: bgColor, };
 
     return (
         <View
-            style={{ flex: 1, flexDirection: 'column', alignItems: 'center', backgroundColor: bgColor }}
+            style={{ flex: 1, flexDirection: 'column', alignItems: 'center', backgroundColor: bgColor, }}
             pointerEvents="box-none"
         >
             <TouchableOpacity
-                style={[styles.button, { backgroundColor: theme.colors.primary }]}
+                style={[styles.button, { backgroundColor: theme.colors.primary, }]}
                 onPress={onPress}
             >
                 <Icon
@@ -45,7 +50,7 @@ const styles = StyleSheet.create({
         borderRadius: 50 / 2,
         backgroundColor: '#E94F37',
 
-        shadowColor: "#000",
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -57,6 +62,6 @@ const styles = StyleSheet.create({
     },
     buttonIcon: {
         fontSize: 25,
-        color: '#F6F7EB'
-    }
+        color: '#F6F7EB',
+    },
 });

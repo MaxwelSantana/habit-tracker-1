@@ -1,14 +1,14 @@
 import * as React from 'react';
-import Svg, { Circle, G } from "react-native-svg";
-import { View, Easing, StyleSheet, Animated } from "react-native";
+import Svg, { Circle, G } from 'react-native-svg';
+import { View, Easing, StyleSheet, Animated } from 'react-native';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const strokeLinejoin: any = "butt" || "round";
-const strokeLinecap: any = "butt" || "round";
-const fill = "none";
-const cx = "50%";
-const cy = "50%";
+const strokeLinejoin: any = 'butt' || 'round';
+const strokeLinecap: any = 'butt' || 'round';
+const fill = 'none';
+const cx = '50%';
+const cy = '50%';
 
 type Props = {
     done: number,
@@ -18,7 +18,7 @@ type Props = {
     duration?: number,
     color?: string,
     opacity?: number,
-    children?: any,
+    children?: React.ReactNode;
 };
 
 export const CircularProgress: React.FC<Props> = ({
@@ -27,9 +27,9 @@ export const CircularProgress: React.FC<Props> = ({
     total = 100,
     size = 20,
     duration = done * 5,
-    color = "#1F8DFC",
+    color = '#1F8DFC',
     opacity = 1,
-    children
+    children,
 }) => {
     const radius = (size + strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
@@ -43,7 +43,7 @@ export const CircularProgress: React.FC<Props> = ({
     const strokeDashoffset = animated.interpolate({
         inputRange: [0, circumference],
         outputRange: [circumference, 0],
-        extrapolate: 'clamp'
+        extrapolate: 'clamp',
     });
 
     React.useEffect(() => {
@@ -54,7 +54,7 @@ export const CircularProgress: React.FC<Props> = ({
                 toValue: circumferenceProgress,
                 duration,
                 useNativeDriver: true,
-                easing: Easing.linear
+                easing: Easing.linear,
             }
         ).start();
 
@@ -64,7 +64,7 @@ export const CircularProgress: React.FC<Props> = ({
     }, [animated]);
 
     return (
-        <View style={{ width: radius * 2, height: radius * 2 }}>
+        <View style={{ width: radius * 2, height: radius * 2, }}>
 
             <Svg
                 width={radius * 2}
@@ -85,24 +85,24 @@ export const CircularProgress: React.FC<Props> = ({
                         r={radius}
                         strokeOpacity=".1"
                         {...{
-                            strokeLinejoin, strokeWidth, cx, cy, fill
+                            strokeLinejoin, strokeWidth, cx, cy, fill,
                         }}
                     />
                 </G>
             </Svg>
-            <View style={[StyleSheet.absoluteFillObject, styles.icon, { opacity }]}>
+            <View style={[StyleSheet.absoluteFillObject, styles.icon, { opacity, }]}>
                 {children}
             </View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
-        transform: [{ rotateZ: "270deg" }],
+        transform: [{ rotateZ: '270deg', }],
     },
     icon: {
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
 });

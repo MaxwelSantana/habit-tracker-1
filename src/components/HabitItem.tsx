@@ -10,11 +10,11 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function HabitItem() {
     const size = 25;
     const color = '#1F8DFC';
-    const { done, total, measure } = {
+    const { done, total, measure, } = {
         done: 5,
         total: 5,
-        measure: 'Copos'
-    }
+        measure: 'Copos',
+    };
     const progress = () => `${done}/${total}`;
     const completed = () => done === total;
     const opacity = completed() ? 0.45 : 1;
@@ -30,15 +30,15 @@ export default function HabitItem() {
                     opacity={opacity}
                     duration={500}
                 >
-                    <MaterialCommunityIcons name="water" {...{ size, color }} />
+                    <MaterialCommunityIcons name="water" {...{ size, color, }} />
                 </CircularProgress>
                 <View style={styles.titleBlock}>
-                    <DefaultText style={[styles.title, { opacity }, completed() && { textDecorationLine: 'line-through', textDecorationStyle: 'solid' }]}>Beber água</DefaultText>
-                    <DefaultText style={[styles.motivationPhrase, { opacity }]}>Go for it</DefaultText>
+                    <DefaultText style={[styles.title, { opacity, }, completed() && { textDecorationLine: 'line-through', textDecorationStyle: 'solid', }]}>Beber água</DefaultText>
+                    <DefaultText style={[styles.motivationPhrase, { opacity, }]}>Go for it</DefaultText>
                 </View>
                 <View style={styles.goalsBlock}>
-                    <DefaultText style={[styles.goalProgress, { color, opacity }]}>{progress()}</DefaultText>
-                    <DefaultText style={[styles.goalMeasure, { opacity }]}>{measure}</DefaultText>
+                    <DefaultText style={[styles.goalProgress, { color, opacity, }]}>{progress()}</DefaultText>
+                    <DefaultText style={[styles.goalMeasure, { opacity, }]}>{measure}</DefaultText>
                 </View>
             </View>
             <View style={styles.actions}>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#3C4858',
         marginBottom: 10,
         borderRadius: 10,
-        shadowColor: "#1F2E46",
+        shadowColor: '#1F2E46',
         shadowOffset: {
             width: 0,
             height: 1,
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         lineHeight: 18,
-        color: '#E9EAFA'
+        color: '#E9EAFA',
     },
     motivationPhrase: {
         fontSize: 10,
@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     iconShadow: {
-        shadowColor: "#1F2E46",
+        shadowColor: '#1F2E46',
         shadowOffset: {
             width: 0,
             height: 2,
         },
         shadowRadius: 4,
-    }
-})
+    },
+});

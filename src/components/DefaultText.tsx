@@ -1,8 +1,13 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleProp, TextStyle } from 'react-native';
 
-export default function DefaultText({ children, style }) {
+type Props = {
+    style: StyleProp<TextStyle>,
+    children: React.ReactNode;
+}
+
+export default function DefaultText({ children, style, }: Props) {
     return (
-        <Text style={[{ fontWeight: '700'}, style, { fontFamily: 'Roboto'}]}>{children}</Text>
+        <Text style={[{ fontWeight: '700', }, style, { fontFamily: 'Roboto', }]}>{children}</Text>
     );
 }
