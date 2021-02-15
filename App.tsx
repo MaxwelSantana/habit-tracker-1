@@ -7,22 +7,23 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainStack from './src/stacks/MainStack';
 
 const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#1F8DFC',
-    accent: 'yellow',
-  },
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		primary: '#1F8DFC',
+		accent: 'yellow',
+	},
 };
 
 export default function App() {
-  const statusBar = false;
-  return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <MainStack />
-      </NavigationContainer>
-      { statusBar && <StatusBar style="light" />}
-    </PaperProvider>
-  );
+	const statusBar = false;
+	const teste = 0;
+	return (
+		<PaperProvider theme={theme}>
+			<NavigationContainer>
+				<MainStack />
+			</NavigationContainer>
+			{statusBar && <StatusBar style="light" />}
+		</PaperProvider>
+	);
 }

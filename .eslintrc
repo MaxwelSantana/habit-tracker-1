@@ -1,9 +1,14 @@
 {
     "parser": "@typescript-eslint/parser",
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "react-hooks"
     ],
     "rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
         "semi": [
             "error",
             "always"
@@ -27,6 +32,8 @@
                 "exports": "never",
                 "functions": "never"
             }
-        ]
+        ],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error"
     }
 }
