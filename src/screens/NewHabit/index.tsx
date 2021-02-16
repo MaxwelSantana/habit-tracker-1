@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View, TextInput, Button, FlatList }
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../../stacks/MainStack';
 import DefaultText from '../../components/DefaultText';
+import { BackIcon } from '../../Icons';
 
 type Props = {
 	navigation: StackNavigationProp<MainStackParamList, 'NewHabit'>
@@ -32,6 +33,7 @@ const CategoryItem = ({ name, desc, img, }: { name: string, desc: string, img: s
 const Header = ({ title, back, }: { title: string, back: () => void }) => (
 	<View style={{ height: 44, alignItems: 'center', justifyContent: 'center', }}>
 		<DefaultText style={{ fontSize: 16, }}>{title}</DefaultText>
+		<BackIcon size={22} color="#E9EAFA" />
 	</View>
 );
 
@@ -61,7 +63,7 @@ export default NewHabitWithSuggestions;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: '#1F2E46',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
