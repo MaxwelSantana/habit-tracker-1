@@ -4,6 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../../stacks/MainStack';
 import DefaultText from '../../components/DefaultText';
 import { BackIcon } from '../../Icons';
+import { useTheme } from 'react-native-paper';
 
 type Props = {
 	navigation: StackNavigationProp<MainStackParamList, 'NewHabit'>
@@ -30,12 +31,17 @@ const CategoryItem = ({ name, desc, img, }: { name: string, desc: string, img: s
 	</>
 );
 
-const Header = ({ title, back, }: { title: string, back: () => void }) => (
-	<View style={{ height: 44, alignItems: 'center', justifyContent: 'center', }}>
-		<DefaultText style={{ fontSize: 16, }}>{title}</DefaultText>
-		<BackIcon size={22} color="#E9EAFA" />
-	</View>
-);
+const HeaderWithBack = ({ title, back, }: { title: string, back: () => void }) => {
+	const { colors, } = useTheme();
+	return (
+		<View style={{alignItems: 'center',margin: 10,height: 44, justifyContent: 'center'}}>
+			<DefaultText style={{ fontSize: 16, color: colors.text,}}>{title}</DefaultText>
+			<TouchableOpacity style={{justifyContent:'center',position:'absolute',left:0,}} onPress={back}>
+				<BackIcon size={24} color={colors.text} />
+			</TouchableOpacity>
+		</View>
+	);
+};
 
 const NewHabitWithSuggestions = ({ navigation, }: Props) => {
 	const [habitName, setHabitName] = useState('teste');
@@ -47,7 +53,7 @@ const NewHabitWithSuggestions = ({ navigation, }: Props) => {
 
 	return (
 		<View style={styles.container}>
-			<Header title="Novo Habito" back={goToNewHabitScreen} />
+			<HeaderWithBack title="Novo Habito" back={goToNewHabitScreen} />
 			<NewHabitFormName value={habitName} handleChangeText={handleChangeText} handleSubmit={goToNewHabitScreen} />
 			<FlatList
 				data={categories}
@@ -64,7 +70,5 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#1F2E46',
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 });

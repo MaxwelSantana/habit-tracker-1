@@ -9,11 +9,13 @@ import Constants from 'expo-constants';
 
 const theme = {
 	...DefaultTheme,
+	myOwnProperty: true,
 	colors: {
 		...DefaultTheme.colors,
-		primary: '#1B8FFF',
 		background: '#1F2E46',
 		surface: '#3C4858',
+		primary: '#1B8FFF',
+		text: '#E9EAFA',
 	},
 };
 

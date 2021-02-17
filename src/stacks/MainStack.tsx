@@ -11,23 +11,23 @@ export type MainStackParamList = {
 };
 
 export default () => (
-    <Stack.Navigator
-        initialRouteName="MainTab"
-        headerMode="none"
-        screenOptions={{
-            headerShown: false,
-            animationEnabled: false,
-        }}
-        mode="modal"
-    >
-        <Stack.Screen name="MainTab" component={MainTab} />
-        <Stack.Screen
-            name="NewHabit"
-            component={NewHabit}
-            options={{
-                animationEnabled: true,
-                cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
-            }}
-        />
-    </Stack.Navigator>
+	<Stack.Navigator
+		initialRouteName="NewHabit"
+		headerMode="none"
+		screenOptions={{
+			headerShown: false,
+			animationEnabled: false,
+		}}
+		mode="modal"
+	>
+		<Stack.Screen name="MainTab" component={MainTab} />
+		<Stack.Screen
+			name="NewHabit"
+			component={NewHabit}
+			options={{
+				animationEnabled: true,
+				cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
+			}}
+		/>
+	</Stack.Navigator>
 );
