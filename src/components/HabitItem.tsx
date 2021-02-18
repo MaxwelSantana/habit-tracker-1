@@ -6,7 +6,7 @@ import { CircularProgress } from './CircularProgress';
 import DefaultText from './DefaultText';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { DoneIcon, HabitIcon, UndoIcon } from '../Icons';
+import { DoneIcon, HabitIcon, UndoIcon } from '../icons';
 
 export default function HabitItem() {
 	const size = 25;

@@ -1,36 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 
 import MainStack from './src/stacks/MainStack';
 import Constants from 'expo-constants';
 
-const theme = {
-	...DefaultTheme,
-	myOwnProperty: true,
-	colors: {
-		...DefaultTheme.colors,
-		background: '#1F2E46',
-		surface: '#3C4858',
-		primary: '#1B8FFF',
-		text: '#E9EAFA',
-	},
-};
+import { ThemeProvider, DefaultTheme } from 'styled-components/native';
+import { dark } from './src/styles/themes/dark';
 
 export default function App() {
 	const statusBar = false;
-	const teste = 0;
 	return (
 		<View style={styles.container}>
-
-			<PaperProvider theme={theme}>
+			<ThemeProvider theme={dark}>
 				<NavigationContainer>
 					<MainStack />
 				</NavigationContainer>
 				{statusBar && <StatusBar style="light" />}
-			</PaperProvider>
+			</ThemeProvider>
 		</View>
 	);
 }
