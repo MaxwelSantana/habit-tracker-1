@@ -9,5 +9,4 @@ const dark: DefaultTheme = {
 		text: '#E9EAFA',
 	},
 };
-
 export { dark };

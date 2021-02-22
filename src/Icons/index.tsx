@@ -25,6 +25,10 @@ export const BackIcon = ({ size, color, }: IconProps) => (
 	<Feather name="chevron-left" size={size} color={color} />
 );
 
+export const NextIcon = ({ size, color, }: IconProps) => (
+	<Feather name="arrow-right" size={size} color={color} />
+);
+
 export const HabitIcon = ({ name, size, color, }: HabitIconProps & IconProps) => (
 	<MaterialCommunityIcons name={name} size={size} color={color} />
 );
