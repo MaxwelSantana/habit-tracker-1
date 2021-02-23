@@ -5,10 +5,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NextIcon } from '../../../icons';
 
 const StyledView = styled.View`
-  flex: 1;
-  height: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
 `;
 const StyledInputName = styled(Input)`
   color: ${(props) => props.theme.colors.text};

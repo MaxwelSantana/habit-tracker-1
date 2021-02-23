@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 export default () => (
   <Stack.Navigator
-    initialRouteName="NewHabit"
+    initialRouteName="AddHabit"
     headerMode="none"
     screenOptions={{
       headerShown: false,
