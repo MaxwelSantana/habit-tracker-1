@@ -12,7 +12,7 @@ const HeaderView = styled.View`
 `;
 
 const HeaderTitle = styled(DefaultText)`
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.onBackground};
   font-size: 16px;
 `;
 
@@ -28,7 +28,7 @@ const Header = ({ title, back }: { title: string; back: () => void }) => {
     <HeaderView>
       <HeaderTitle>{title}</HeaderTitle>
       <HeaderLeftBackbutton onPress={back}>
-        <BackIcon size={24} color={colors.text} />
+        <BackIcon size={24} color={colors.onBackground} />
       </HeaderLeftBackbutton>
     </HeaderView>
   );

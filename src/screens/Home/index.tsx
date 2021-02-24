@@ -25,7 +25,7 @@ export default class TodayHabitList extends Component {
           keyExtractor={(item, index) => String(index)}
         />
       </View>
-    );
+    )
   }
 }
 

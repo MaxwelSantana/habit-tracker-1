@@ -25,8 +25,9 @@ const AddHabit = ({ navigation }: AddHabitProps) => {
   const handleChangeText = (text: string) => setHabitName(text);
 
   const categories: Array<CategoryType> = [
-    { title: 'category 1', desc: 'desc 1', img: 'img 1' },
-    { title: 'category 2', desc: 'desc 2', img: 'img 2' },
+    { title: 'Atividades em casa', desc: 'Use esse tempo para fazer algo novo', img: 'img 1' },
+    { title: 'Corpo saudável', desc: 'Base do seu bem-estar', img: 'img 2' },
+    { title: 'Aprenda e explore', desc: 'Fique com fome de conhecimento', img: 'img 2' },
   ];
 
   return (

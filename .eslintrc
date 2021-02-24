@@ -1,19 +1,17 @@
 {
-    "extends": ["@react-native-community", "plugin:react-native-a11y/android","airbnb-typescript", "prettier", "prettier/@typescript-eslint", "prettier/react"],
+    "extends": ["@react-native-community","airbnb-typescript", "prettier", "prettier/@typescript-eslint", "prettier/react"],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": ["tsconfig.json"]
     },
+    "ignorePatterns": ["metro.config.js"],
     "plugins": [
         "@typescript-eslint",
         "react-hooks",
-        "react-native",
-        "react-native-a11y"
+        "react-native"
     ],
     "rules": {
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "error",
-        "react-native-a11y/has-accessibility-hint": "error",
-        "react-native-a11y/has-accessibility-props": "error"
+        "react-hooks/exhaustive-deps": "error"
     }
 }

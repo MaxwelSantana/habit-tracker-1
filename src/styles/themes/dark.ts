@@ -6,7 +6,18 @@ const dark: DefaultTheme = {
     background: '#1F2E46',
     surface: '#3C4858',
     primary: '#1B8FFF',
-    text: '#E9EAFA',
+    onBackground: '#E9EAFA',
+  },
+
+  fonts: {
+    regular: {
+      fontFamily: 'Roboto',
+      fontWeight: 'normal',
+    },
+    bold: {
+      fontFamily: 'Roboto',
+      fontWeight: 'bold',
+    },
   },
 };
 export default dark;

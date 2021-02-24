@@ -4,7 +4,7 @@ import { CategoryType } from '../../../shared/types';
 
 export const StyledSectionTitle = styled.Text`
   font-size: 16px;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.onBackground};
   opacity: 0.8;
 `;
 

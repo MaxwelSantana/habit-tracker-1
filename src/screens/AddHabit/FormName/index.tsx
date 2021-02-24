@@ -9,7 +9,7 @@ const StyledView = styled.View`
   padding-right: 6px;
 `;
 const StyledInputName = styled(Input)`
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.onBackground};
   font-size: 16px;
 `;
 
