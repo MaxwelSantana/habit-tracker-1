@@ -1,14 +1,14 @@
 import styled from 'styled-components/native';
 
-export const StyledView = styled.View`
+export const ViewContainer = styled.View`
   background-color: ${(props) => props.theme.colors.surface};
+  margin-top: 10px;
   margin-bottom: 20px;
   height: 120px;
   border-radius: 10px;
-  padding-left: 16px;
-  padding-top: 35px;
-  padding-bottom: 35px;
   elevation: 5;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 export const StyledTitle = styled.Text`
   font-size: 18px;
